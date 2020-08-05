@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server
+    container_name: rhyze_sql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=b43tn4t10n
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./vol/sql:/var/opt/mssql/data
