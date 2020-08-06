@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "a32b0b30-804d-4963-b4b5-d8c3b5bc8f60",
+		"name": "Rhyze",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "POST verifyPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "79830f80-44b3-41d1-b1a4-8c12c7f116da",
+								"exec": [
+									"// should have statusCode 200..\r",
+									"pm.test(\"Status Code should be 200.\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response should include a [Token]\", function() {\r",
+									"    \r",
+									"    var auth = pm.response.json();\r",
+									"    \r",
+									"    pm.environment.set(\"user.jwt\", auth.idToken);\r",
+									"    pm.environment.set(\"user.refreshToken\", auth.refreshToken);\r",
+									"    \r",
+									"    return auth.hasOwnProperty(\"idToken\") && auth.hasOwnProperty(\"refreshToken\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"email\": \"{{user.email}}\",\r\n\t\"password\": \"{{user.password}}\",\r\n\t\"returnSecureToken\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key={{rhyze.auth.apiKey}}",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"identitytoolkit",
+								"v3",
+								"relyingparty",
+								"verifyPassword"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{rhyze.auth.apiKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST refreshToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"grant_type\": \"refresh_token\",\r\n\t\"refresh_token\": \"{{user.refreshToken}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://securetoken.googleapis.com/v1/token?key={{rhyze.auth.apiKey}}",
+							"protocol": "https",
+							"host": [
+								"securetoken",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"v1",
+								"token"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{rhyze.auth.apiKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "GET /weatherforecast",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{user.jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/weatherforecast",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"weatherforecast"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
