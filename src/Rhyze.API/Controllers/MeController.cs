@@ -1,18 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Rhyze.API.Models;
+using Rhyze.API.Queries;
+using System.Threading.Tasks;
 
 namespace Rhyze.API.Controllers
 {
     [ApiController]
     public class MeController : ControllerBase
     {
-        [Route("/me")]
-        public object Me()
-        {
-            var email = User.FindFirstValue(ClaimTypes.Email);
-            var id = User.FindFirstValue("user_id");
+        private readonly IMediator _mediator;
 
-            return new { id, email };
+        public MeController(IMediator mediator) => _mediator = mediator;
+
+        [Route("/me")]
+        public async Task<AuthenticatedUser> MeAsync()
+        {
+            return await _mediator.Send(new GetAuthenticatedUserQuery());
         }
     }
 }

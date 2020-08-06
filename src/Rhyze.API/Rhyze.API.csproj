@@ -5,8 +5,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.Firebase.Authentication" Version="2.0.1" />
+    <PackageReference Include="MediatR" Version="8.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.7.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rhyze.Core\Rhyze.Core.csproj" />
   </ItemGroup>
 </Project>
