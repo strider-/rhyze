@@ -2,7 +2,6 @@ using AspNetCore.Firebase.Authentication.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +25,6 @@ namespace Rhyze.API
 
             var jwtConfig = Configuration.GetSection("Authentication:Jwt");
             services.AddFirebaseAuthentication(jwtConfig["Issuer"], jwtConfig["Audience"]);
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
         }
