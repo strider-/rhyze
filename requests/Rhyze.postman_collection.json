@@ -74,6 +74,32 @@
 				},
 				{
 					"name": "POST refreshToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0d0d990e-2db3-4803-a5a2-92ab53552324",
+								"exec": [
+									"// should have statusCode 200..\r",
+									"pm.test(\"Status Code should be 200.\", function () {\r",
+									"    pm.response.to.have.status(200)\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response should include a [Token]\", function() {\r",
+									"    \r",
+									"    var auth = pm.response.json();\r",
+									"    \r",
+									"    pm.environment.set(\"user.jwt\", auth.id_token);\r",
+									"    pm.environment.set(\"user.refreshToken\", auth.refresh_token);\r",
+									"    \r",
+									"    return auth.hasOwnProperty(\"id_token\") && auth.hasOwnProperty(\"refresh_token\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -112,7 +138,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "GET /weatherforecast",
+			"name": "GET /me",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -126,14 +152,14 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:5000/weatherforecast",
+					"raw": "http://localhost:5000/me",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"weatherforecast"
+						"me"
 					]
 				}
 			},
