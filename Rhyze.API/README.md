@@ -1,0 +1,3 @@
+# Rhyze API
+
+## Getting Started
