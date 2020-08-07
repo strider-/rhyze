@@ -1,11 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using Rhyze.Core.Models;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Rhyze.Core.Interfaces
 {
     public interface IUploadService
     {
-        Task UploadTrackAsync();
+        Task<Error> UploadTrackAsync(Guid ownerId, string contentType, Stream data);
 
-        Task UploadArtworkAsync();
+        Task<Error> UploadArtworkAsync();
     }
 }

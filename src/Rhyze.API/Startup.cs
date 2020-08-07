@@ -1,12 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rhyze.API.Extensions;
+using Rhyze.Core.Interfaces;
+using Rhyze.Services;
 using System.Reflection;
 
 namespace Rhyze.API
@@ -29,6 +30,8 @@ namespace Rhyze.API
             services.AddJwtAuthentication(Configuration.GetSection("Authentication:Jwt"));
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            services.AddScoped<IUploadService, UploadService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

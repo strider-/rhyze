@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Rhyze.API.Commands;
+using Rhyze.API.Extensions;
+using Rhyze.API.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Rhyze.API.Controllers
@@ -10,30 +12,21 @@ namespace Rhyze.API.Controllers
     [Route("[controller]")]
     public class MediaController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public MediaController(IMediator mediator) => _mediator = mediator;
+
         [HttpPost("upload/track")]
+        [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue,
                            MemoryBufferThreshold = int.MaxValue,
                            ValueLengthLimit = int.MaxValue)]
-        public async Task<object> UploadTrackAsync()
+        public async Task<IEnumerable<UploadResult>> UploadTrackAsync([FromForm] AudioUpload model)
         {
-            if (!Request.HasFormContentType)
-            {
-                return new BadRequestResult();
-            }
-
-            var form = await Request.ReadFormAsync();
-
-            var md5 = MD5.Create();
-            var result = new Dictionary<string, string>();
-
-            foreach (var file in form.Files)
-            {
-                using (var stream = file.OpenReadStream())
-                {
-                    var hash = string.Join("", md5.ComputeHash(stream).Select(b => b.ToString("x2")));
-                    result[file.FileName] = hash;
-                }
-            }
+            var result = await _mediator.Send(new UploadTracksCommand(
+                ownerId: User.UserId(),
+                files: model.Tracks
+            ));
 
             return result;
         }
