@@ -16,10 +16,10 @@ namespace Rhyze.Services
 
         private string[] AllowedAudioContentTypes = new[] { "audio/mpeg", "audio/flac", "audio/x-flac" };
 
-        public UploadService(IBlobStore store)
+        public UploadService(IBlobStore store, HashAlgorithm hasher = null)
         {
             _store = store;
-            _hasher = MD5.Create();
+            _hasher = hasher ?? MD5.Create();
         }
 
         public async Task<Error> UploadTrackAsync(Guid ownerId, string contentType, Stream data)

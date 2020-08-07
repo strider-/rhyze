@@ -1,11 +1,13 @@
-# Rhyze Backend
+# Rhyze Projects
 
-## Getting Started
+## Backend
+The projects that compose the entirety of the backend structure of the application. See individual project READMEs for further details.
 
-Set the application secrets in the API project:
+## [Rhyze.API](.\Rhyze.API\README.md)
+## [Rhyze.Core](.\Rhyze.Core\README.md)
+## [Rhyze.Data](.\Rhyze.Data\README.md)
+## [Rhyze.Services](.\Rhyze.Services\README.md)
 
-```bash
-$ cd ./Rhyze.API
-$ dotnet user-secrets set "Authentication:Jwt:Issuer" "<your google oauth2 app project name>"
-$ dotnet user-secrets set "Authentication:Jwt:Audience" "https://securetoken.google.com/<your google oauth2 app project name>"
-```
+## Frontend
+
+TBD

@@ -23,4 +23,5 @@ See individual project READMEs for further detail
     /Rhyze.Services - Business logic
  vol                - Docker volume mount root
     /sql            - MSSQL volume
+    /azurite        - Storage emulator volume
 ```
