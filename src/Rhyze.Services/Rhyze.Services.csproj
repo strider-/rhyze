@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\Rhyze.Core\Rhyze.Core.csproj" />
   </ItemGroup>
 
 </Project>
