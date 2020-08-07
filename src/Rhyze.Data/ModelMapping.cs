@@ -3,7 +3,7 @@ using Rhyze.Core.Models;
 
 namespace Rhyze.Data
 {
-    public static class ModelMapping
+    static class ModelMapping
     {
         public static void Initialize()
         {

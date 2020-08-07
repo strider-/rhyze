@@ -65,9 +65,6 @@ namespace Rhyze.API.Extensions
 
             services.AddScoped<IDatabase>(provider => new Database(connStr));
 
-            RepoDb.SqlServerBootstrap.Initialize();
-            ModelMapping.Initialize();
-
             return services;
         }
     }

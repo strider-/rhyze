@@ -13,6 +13,12 @@ namespace Rhyze.Data
 
         public Database(string connectionString) => _connString = connectionString;
 
+        static Database()
+        {
+            SqlServerBootstrap.Initialize();
+            ModelMapping.Initialize();
+        }
+
         public async Task<T> ExecuteAsync<T>(IQueryAsync<T> query)
         {
             using (var conn = await NewConnection().EnsureOpenAsync())

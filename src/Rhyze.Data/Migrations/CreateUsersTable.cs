@@ -7,20 +7,18 @@ namespace Rhyze.Data.Migrations
     {
         public override void Up()
         {
-            Create.Table("Users")
-                  .WithColumn("Id").AsGuid().NotNullable().PrimaryKey().WithDefaultValue(SystemMethods.NewGuid)
-                  .WithColumn("IdentityId").AsString().NotNullable()
-                  .WithColumn("Email").AsString().NotNullable();
+            Execute.Sql(@"CREATE TABLE [dbo].[Users] (
+	                        [Id]	      UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL,
+	                        [IdentityId]  NVARCHAR(255)    NOT NULL,
+	                        [Email]       NVARCHAR(255)    NOT NULL,
+	                        CONSTRAINT [PK_Users] PRIMARY KEY NONCLUSTERED ([Id] ASC)
+                        );");
 
-            Create.Index("IX_IdentityId")
-                .OnTable("Users")
-                .OnColumn("IdentityId").Ascending()
-                .WithOptions().NonClustered();
-
-            Create.Index("IX_Email")
-                .OnTable("Users")
-                .OnColumn("Email").Ascending()
-                .WithOptions().NonClustered();
+            Create.Index("IX_IdentityId_Email")
+                 .OnTable("Users")
+                 .OnColumn("IdentityId").Ascending()
+                 .OnColumn("Email").Ascending()
+                 .WithOptions().Clustered();
         }
 
         public override void Down()
