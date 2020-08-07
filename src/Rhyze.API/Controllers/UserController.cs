@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Rhyze.API.Controllers
 {
     [ApiController]
-    public class MeController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public MeController(IMediator mediator) => _mediator = mediator;
+        public UserController(IMediator mediator) => _mediator = mediator;
 
         [Route("/me")]
         public async Task<AuthenticatedUser> MeAsync()
