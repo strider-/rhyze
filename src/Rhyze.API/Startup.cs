@@ -21,7 +21,7 @@ namespace Rhyze.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDatabaseMigrations(Configuration.GetSection("Database"));
+            services.AddDataAccessLayer(Configuration.GetSection("Database"));
 
             services.AddControllers(options => options.Filters.Add(new AuthorizeFilter()));
 

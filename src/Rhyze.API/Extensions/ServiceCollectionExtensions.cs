@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Rhyze.API.Security;
+using Rhyze.Data;
 using Rhyze.Data.Migrations;
 
 namespace Rhyze.API.Extensions
@@ -23,7 +24,7 @@ namespace Rhyze.API.Extensions
             var audience = configSection["Audience"];
             var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>($"{issuer}/.well-known/openid-configuration", new OpenIdConnectConfigurationRetriever());
 
-            services.AddSingleton<RhyzeBearerEvents>();
+            services.AddScoped<RhyzeBearerEvents>();
 
             services.AddAuthentication(o =>
                     {
@@ -45,12 +46,12 @@ namespace Rhyze.API.Extensions
         }
 
         /// <summary>
-        /// Adds and configures support for running database migrations.
+        /// Adds and configures support for the data access layer, including database migrations.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configSection">The configuration section containing the database connection string.</param>
         /// <returns></returns>
-        public static IServiceCollection AddDatabaseMigrations(this IServiceCollection services, IConfigurationSection configSection)
+        public static IServiceCollection AddDataAccessLayer(this IServiceCollection services, IConfigurationSection configSection)
         {
             var connStr = configSection["ConnectionString"];
 
@@ -60,6 +61,12 @@ namespace Rhyze.API.Extensions
                           .WithGlobalConnectionString(connStr)
                           .ScanIn(typeof(CreateUsersTable).Assembly).For.Migrations())
                     .AddLogging(lb => lb.AddFluentMigratorConsole());
+
+
+            services.AddScoped<IDatabase>(provider => new Database(connStr));
+
+            RepoDb.SqlServerBootstrap.Initialize();
+            ModelMapping.Initialize();
 
             return services;
         }

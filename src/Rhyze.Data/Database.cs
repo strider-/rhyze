@@ -1,4 +1,5 @@
-﻿using Rhyze.Data.Commands;
+﻿using RepoDb;
+using Rhyze.Data.Commands;
 using Rhyze.Data.Queries;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -12,19 +13,19 @@ namespace Rhyze.Data
 
         public Database(string connectionString) => _connString = connectionString;
 
-        public Task<T> ExecuteAsync<T>(IQueryAsync<T> query)
+        public async Task<T> ExecuteAsync<T>(IQueryAsync<T> query)
         {
-            using (var conn = NewConnection())
+            using (var conn = await NewConnection().EnsureOpenAsync())
             {
-                return query.ExecuteAsync(conn);
+                return await query.ExecuteAsync(conn);
             }
         }
 
-        public Task ExecuteAsync(ICommandAsync command)
+        public async Task ExecuteAsync(ICommandAsync command)
         {
-            using (var conn = NewConnection())
+            using (var conn = await NewConnection().EnsureOpenAsync())
             {
-                return command.ExecuteAsync(conn);
+                await command.ExecuteAsync(conn);
             }
         }
 
