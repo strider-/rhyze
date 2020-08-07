@@ -11,3 +11,12 @@ services:
       - "1433:1433"
     volumes:
       - ./vol/sql:/var/opt/mssql/data
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: rhyze_azurite
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+    volumes:
+      - ./vol/azurite:/data
