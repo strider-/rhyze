@@ -2,9 +2,11 @@
 
 ## Getting Started
 
-Running `docker-compose up` will start the MSSQL Server. After you've confirmed it's running, navigate to the `scripts` directory
-and run `0-create-database.sh` (you may need to run `chmod +x 0-create-database.sh` before hand.)  This will create the application 
-database in the docker container.
+Running `docker-compose up` will start the MSSQL Server and Azurite, the open source Azure storage emulator. 
+
+After you've confirmed the containers are running, navigate to the `scripts` directory and run `0-create-database.sh` 
+(you may need to run `chmod +x 0-create-database.sh` before hand.)  This will create the application database in the docker 
+container.
 
 See individual project READMEs for further detail
 
