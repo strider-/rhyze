@@ -1,5 +1,3 @@
-using AspNetCore.Firebase.Authentication.Extensions;
-using FluentMigrator.Runner;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rhyze.API.Extensions;
-using Rhyze.Data.Migrations;
 using System.Reflection;
 
 namespace Rhyze.API
@@ -24,18 +21,11 @@ namespace Rhyze.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connStr = Configuration.GetSection("Database")["ConnectionString"];
-            services.AddFluentMigratorCore()
-                    .ConfigureRunner(rb =>
-                        rb.AddSqlServer()
-                          .WithGlobalConnectionString(connStr)
-                          .ScanIn(typeof(CreateDatabase).Assembly).For.Migrations())
-                    .AddLogging(lb => lb.AddFluentMigratorConsole());
+            services.AddDatabaseMigrations(Configuration.GetSection("Database"));
 
             services.AddControllers(options => options.Filters.Add(new AuthorizeFilter()));
 
-            var jwtConfig = Configuration.GetSection("Authentication:Jwt");
-            services.AddFirebaseAuthentication(jwtConfig["Issuer"], jwtConfig["Audience"]);
+            services.AddJwtAuthentication(Configuration.GetSection("Authentication:Jwt"));
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
         }
