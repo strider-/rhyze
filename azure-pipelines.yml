@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build --configuration $(buildConfiguration) ./src/
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test --no-build
-  displayName: 'dotnet test --no-build'
+- script: dotnet test --no-build ./src/Rhyze.Tests/Rhyze.Tests.csproj
+  displayName: 'dotnet test --no-build ./src/Rhyze.Tests/Rhyze.Tests.csproj'
