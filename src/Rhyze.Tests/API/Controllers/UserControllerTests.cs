@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using Rhyze.API.Controllers;
 using Rhyze.API.Models;
@@ -19,11 +18,7 @@ namespace Rhyze.Tests.API.Controllers
 
         public UserControllerTests()
         {
-            var httpContext = new DefaultHttpContext() { User = _fixture.User };
-            _controller = new UserController(_mediator.Object)
-            {
-                ControllerContext = new Microsoft.AspNetCore.Mvc.ControllerContext { HttpContext = httpContext }
-            };
+            _controller = MediatorControllerGenerator.Create<UserController>(_fixture, _mediator);
         }
 
         [Fact]

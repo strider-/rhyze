@@ -152,14 +152,56 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:5000/me",
-					"protocol": "http",
+					"raw": "https://localhost:5001/me",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "5001",
 					"path": [
 						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /media/upload/tracks",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{user.jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tracks",
+							"type": "file",
+							"src": "/Z:/music/Japanese/J-Core/(ARCD-0069) FÄRGRIK - OWL/01 FÄRGRIK.flac"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/media/upload/tracks",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"media",
+						"upload",
+						"tracks"
 					]
 				}
 			},

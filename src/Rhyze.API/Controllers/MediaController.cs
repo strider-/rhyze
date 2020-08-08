@@ -16,12 +16,12 @@ namespace Rhyze.API.Controllers
 
         public MediaController(IMediator mediator) => _mediator = mediator;
 
-        [HttpPost("upload/track")]
+        [HttpPost("upload/tracks")]
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue,
                            MemoryBufferThreshold = int.MaxValue,
                            ValueLengthLimit = int.MaxValue)]
-        public async Task<IEnumerable<UploadResult>> UploadTrackAsync([FromForm] AudioUpload model)
+        public async Task<IEnumerable<UploadResult>> UploadTracksAsync([FromForm] AudioUpload model)
         {
             var result = await _mediator.Send(new UploadTracksCommand(
                 ownerId: User.UserId(),
