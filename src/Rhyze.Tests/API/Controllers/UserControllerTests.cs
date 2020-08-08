@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using Rhyze.API.Controllers;
 using Rhyze.API.Models;
@@ -18,11 +19,15 @@ namespace Rhyze.Tests.API.Controllers
 
         public UserControllerTests()
         {
-            _controller = new UserController(_mediator.Object);
+            var httpContext = new DefaultHttpContext() { User = _fixture.User };
+            _controller = new UserController(_mediator.Object)
+            {
+                ControllerContext = new Microsoft.AspNetCore.Mvc.ControllerContext { HttpContext = httpContext }
+            };
         }
 
         [Fact]
-        public async Task MeAsync_Returns_Authenticated_User()
+        public async Task MeAsync_Returns_An_Authenticated_User_From_The_Current_Context()
         {
             _mediator.Setup(m => m.Send(It.IsAny<GetAuthenticatedUserQuery>(), default))
                      .ReturnsAsync(new AuthenticatedUser
@@ -33,6 +38,9 @@ namespace Rhyze.Tests.API.Controllers
 
             var result = await _controller.MeAsync();
 
+            _mediator.Verify(m => m.Send(It.Is<GetAuthenticatedUserQuery>(
+                q => q.User == _fixture.User), default)
+            );
             Assert.NotNull(result);
             Assert.Equal(_fixture.ExpectedEmail, result.Email);
             Assert.Equal(_fixture.ExpectedRhyzeId, result.UserId);
