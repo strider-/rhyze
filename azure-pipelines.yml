@@ -15,5 +15,5 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration) ./src/
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test --no-build ./src/Rhyze.Tests/Rhyze.Tests.csproj
-  displayName: 'dotnet test --no-build ./src/Rhyze.Tests/Rhyze.Tests.csproj'
+- script: dotnet test **/Rhyze.Tests.csproj
+  displayName: 'dotnet test **/Rhyze.Tests.csproj'
