@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Rhyze.Core\Rhyze.Core.csproj" />
     <ProjectReference Include="..\Rhyze.Data\Rhyze.Data.csproj" />
+    <ProjectReference Include="..\Rhyze.Services\Rhyze.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
