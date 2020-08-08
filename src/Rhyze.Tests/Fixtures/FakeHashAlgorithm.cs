@@ -2,7 +2,7 @@
 
 namespace Rhyze.Tests.Fixtures
 {
-    internal class FakeHashAlgorithm : HashAlgorithm
+    internal class FakeHashAlgorithm : HMAC
     {
         public override void Initialize() { }
         protected override void HashCore(byte[] array, int ibStart, int cbSize) { }

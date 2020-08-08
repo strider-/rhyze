@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Rhyze.Core.Interfaces;
 using Rhyze.Core.Models;
@@ -19,6 +20,8 @@ namespace Rhyze.Services
             _client = new BlobServiceClient(connectionString);
         }
 
+        public AzureBlobStore(BlobServiceClient client) => _client = client;
+
         public Task<Error> DeleteAsync(string blobPath)
         {
             throw new NotImplementedException();
@@ -36,29 +39,35 @@ namespace Rhyze.Services
                 return new Error("Refusing to upload data without a content type.");
             }
 
-            var (container, path) = Parse(blobPath);
-
-            using (blob)
+            try
             {
-                var containerClient = _client.GetBlobContainerClient(container);
-                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+                var (container, path) = Parse(blobPath);
 
-                var blobClient = containerClient.GetBlobClient(path);
-
-                if (await blobClient.ExistsAsync())
+                using (blob)
                 {
-                    return new Error("You've already uploaded this! Please delete it first if you want to replace it.");
+                    var containerClient = _client.GetBlobContainerClient(container);
+                    await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+                    var blobClient = containerClient.GetBlobClient(path);
+
+                    if (await blobClient.ExistsAsync())
+                    {
+                        return new Error("You've already uploaded this! Please delete it first if you want to replace it.");
+                    }
+
+                    await blobClient.UploadAsync(blob, new BlobHttpHeaders { ContentType = contentType }, metadata);
                 }
 
-                await blobClient.UploadAsync(blob, new BlobHttpHeaders { ContentType = contentType });
-
-                if (metadata != null)
-                {
-                    await blobClient.SetMetadataAsync(metadata);
-                }
+                return null;
             }
-
-            return null;
+            catch (RequestFailedException rfe)
+            {
+                return new Error($"The request to azure storage failed: {rfe.Message}");
+            }
+            catch (Exception e)
+            {
+                return new Error($"An unexpected error happened: {e.Message}");
+            }
         }
 
         private (string Container, string Path) Parse(string path)

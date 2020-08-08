@@ -63,7 +63,8 @@ namespace Rhyze.API.Extensions
                     .AddLogging(lb => lb.AddFluentMigratorConsole());
 
 
-            services.AddScoped<IDatabase>(provider => new Database(connStr));
+            services.AddScoped<IConnectionContext>(provider => new SqlConnectionContext(connStr));
+            services.AddScoped<IDatabase, Database>();
 
             return services;
         }

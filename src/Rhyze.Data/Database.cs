@@ -1,17 +1,15 @@
 ﻿using RepoDb;
 using Rhyze.Data.Commands;
 using Rhyze.Data.Queries;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace Rhyze.Data
 {
     public class Database : IDatabase
     {
-        private readonly string _connString;
+        private readonly IConnectionContext _ctx;
 
-        public Database(string connectionString) => _connString = connectionString;
+        public Database(IConnectionContext context) => _ctx = context;
 
         static Database()
         {
@@ -21,7 +19,7 @@ namespace Rhyze.Data
 
         public async Task<T> ExecuteAsync<T>(IQueryAsync<T> query)
         {
-            using (var conn = await NewConnection().EnsureOpenAsync())
+            using (var conn = await _ctx.CreateDbConnection().EnsureOpenAsync())
             {
                 return await query.ExecuteAsync(conn);
             }
@@ -29,12 +27,10 @@ namespace Rhyze.Data
 
         public async Task ExecuteAsync(ICommandAsync command)
         {
-            using (var conn = await NewConnection().EnsureOpenAsync())
+            using (var conn = await _ctx.CreateDbConnection().EnsureOpenAsync())
             {
                 await command.ExecuteAsync(conn);
             }
         }
-
-        protected virtual DbConnection NewConnection() => new SqlConnection(_connString);
     }
 }
