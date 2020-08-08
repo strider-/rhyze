@@ -1,7 +1,4 @@
 # ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
 - master
@@ -15,5 +12,9 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration) ./src/
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test **/Rhyze.Tests.csproj
-  displayName: 'dotnet test **/Rhyze.Tests.csproj'
+  
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: './src/Rhyze.Tests/Rhyze.Tests.csproj'
+    testRunTitle: 'Running Tests Project'
