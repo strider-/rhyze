@@ -6,6 +6,7 @@ The projects that compose the entirety of the backend structure of the applicati
 ### [Rhyze.API](.\Rhyze.API\README.md)
 ### [Rhyze.Core](.\Rhyze.Core\README.md)
 ### [Rhyze.Data](.\Rhyze.Data\README.md)
+### [Rhyze.Functions](.\Rhyze.Functions\README.md)
 ### [Rhyze.Services](.\Rhyze.Services\README.md)
 ### [Rhyze.Tests](.\Rhyze.Tests\README.md)
 
