@@ -1,0 +1,20 @@
+# ASP.NET Core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet build --configuration $(buildConfiguration) ./src/
+  displayName: 'dotnet build $(buildConfiguration)'
+  
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: './src/Rhyze.Tests/Rhyze.Tests.csproj'
+    testRunTitle: 'Running Tests Project'
