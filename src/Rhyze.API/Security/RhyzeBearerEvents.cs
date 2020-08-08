@@ -9,6 +9,7 @@ namespace Rhyze.API.Security
     public class RhyzeBearerEvents : JwtBearerEvents
     {
         private readonly IMediator _mediator;
+
         public RhyzeBearerEvents(IMediator mediator) => _mediator = mediator;
 
         public override async Task TokenValidated(TokenValidatedContext context)
