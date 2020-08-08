@@ -21,6 +21,7 @@ See individual project READMEs for further detail
     /Rhyze.Core     - Core foundation (interfaces, models, etc)
     /Rhyze.Data     - Data access layer
     /Rhyze.Services - Business logic
+    /Rhyze.Tests    - Unit and integration tests
  vol                - Docker volume mount root
     /sql            - MSSQL volume
     /azurite        - Storage emulator volume

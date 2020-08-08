@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rhyze.API", "Rhyze.API\Rhyz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rhyze.Core", "Rhyze.Core\Rhyze.Core.csproj", "{A3C8764C-B431-47B5-A83B-01A0F899C77E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhyze.Services", "Rhyze.Services\Rhyze.Services.csproj", "{6604534B-64C8-4460-82BE-2E1ABD4251D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rhyze.Services", "Rhyze.Services\Rhyze.Services.csproj", "{6604534B-64C8-4460-82BE-2E1ABD4251D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhyze.Data", "Rhyze.Data\Rhyze.Data.csproj", "{F4FB3312-1797-4B8C-9B58-F7292D41E0E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rhyze.Data", "Rhyze.Data\Rhyze.Data.csproj", "{F4FB3312-1797-4B8C-9B58-F7292D41E0E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhyze.Tests", "Rhyze.Tests\Rhyze.Tests.csproj", "{0EEBB143-8BA4-47E5-9E08-78CB2EE50322}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F4FB3312-1797-4B8C-9B58-F7292D41E0E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4FB3312-1797-4B8C-9B58-F7292D41E0E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4FB3312-1797-4B8C-9B58-F7292D41E0E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EEBB143-8BA4-47E5-9E08-78CB2EE50322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EEBB143-8BA4-47E5-9E08-78CB2EE50322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EEBB143-8BA4-47E5-9E08-78CB2EE50322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EEBB143-8BA4-47E5-9E08-78CB2EE50322}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
