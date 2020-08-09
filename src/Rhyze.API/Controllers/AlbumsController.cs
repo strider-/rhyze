@@ -25,7 +25,7 @@ namespace Rhyze.API.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<IEnumerable<Track>> TracksAsync([FromRoute] GetAlbumCommand cmd)
+        public async Task<IEnumerable<Track>> TracksAsync([FromRoute] GetAlbumQuery cmd)
         {
             return await _mediator.Send(cmd);
         }
