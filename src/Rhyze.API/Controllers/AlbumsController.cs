@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Rhyze.API.Commands;
 using Rhyze.API.Extensions;
 using Rhyze.API.Queries;
 using Rhyze.Core.Models;
@@ -20,6 +21,14 @@ namespace Rhyze.API.Controllers
         public async Task<IEnumerable<Album>> IndexAsync([FromQuery] int skip = 0, [FromQuery] int take = 50)
         {
             return await _mediator.Send(new GetAlbumsQuery(User.UserId(), skip, take));
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteAsync([FromBody] DeleteAlbumCommand cmd)
+        {
+            await _mediator.Send(cmd);
+
+            return NoContent();
         }
     }
 }
