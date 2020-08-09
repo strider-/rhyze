@@ -1,4 +1,5 @@
-﻿using Rhyze.Core.Models;
+﻿using Microsoft.Azure.Storage.Blob;
+using Rhyze.Core.Models;
 using System;
 
 namespace Rhyze.Functions
@@ -26,6 +27,13 @@ namespace Rhyze.Functions
                 UploadedUtc = DateTime.UtcNow,
                 Year = tag.Year
             };
+        }
+
+        public static string GetBlobName(this Track track)
+        {
+            var uri = new Uri(track.AudioUrl);
+
+            return new CloudBlockBlob(uri).Name;
         }
     }
 }

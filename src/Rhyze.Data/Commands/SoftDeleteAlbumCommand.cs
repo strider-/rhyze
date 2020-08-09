@@ -1,4 +1,5 @@
 ﻿using RepoDb;
+using Rhyze.Core.Models;
 using System.Data;
 using System.Threading.Tasks;
 
