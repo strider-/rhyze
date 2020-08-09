@@ -25,16 +25,6 @@ namespace Rhyze.Services
         /// </summary>
         public AzureBlobStore(BlobServiceClient client) => _client = client;
 
-        public Task<Error> DeleteAsync(string blobPath)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ExistsAsync(string blobPath)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Error> UploadAsync(string blobPath, Stream blob, string contentType, IDictionary<string, string> metadata = null)
         {
             if (string.IsNullOrWhiteSpace(contentType))

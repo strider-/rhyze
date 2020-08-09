@@ -19,19 +19,5 @@ namespace Rhyze.Core.Interfaces
         /// <param name="metadata">Any additional metadata to store with the blob</param>
         /// <returns></returns>
         Task<Error> UploadAsync(string blobPath, Stream blob, string contentType, IDictionary<string, string> metadata = null);
-
-        /// <summary>
-        /// Checks to see whether or not a blob exists at a given path
-        /// </summary>
-        /// <param name="blobPath"></param>
-        /// <returns></returns>
-        Task<bool> ExistsAsync(string blobPath);
-
-        /// <summary>
-        /// Deletes a blob from the store by a given path
-        /// </summary>
-        /// <param name="blobPath"></param>
-        /// <returns></returns>
-        Task<Error> DeleteAsync(string blobPath);
     }
 }
