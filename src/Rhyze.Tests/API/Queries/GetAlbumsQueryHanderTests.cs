@@ -35,22 +35,5 @@ namespace Rhyze.Tests.API.Queries
                 q.Take == take
             )), Times.Once());
         }
-
-        [Fact]
-        public async Task The_Request_Query_Ensures_Negative_Values_Become_Zero()
-        {
-            var ownerId = Guid.NewGuid();
-            int skip = -15,
-                take = -12;
-            var request = new GetAlbumsQuery { OwnerId = ownerId, Skip = skip, Take = take };
-
-            await _handler.Handle(request, default);
-
-            _db.Verify(db => db.ExecuteAsync(It.Is<GetAlbumListingQuery>(q =>
-                q.OwnerId == ownerId &&
-                q.Skip == 0 &&
-                q.Take == 0
-            )), Times.Once());
-        }
     }
 }
