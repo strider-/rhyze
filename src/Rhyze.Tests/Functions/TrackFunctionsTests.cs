@@ -53,7 +53,7 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task OnTrackUploadedAsync_Reads_Metadata()
         {
-            await _func.OnTrackUploadedAsync(_blob.Object, _container.Object, Mock.Of<ILogger>());
+            await _func.OnTrackUploadedAsync("", _blob.Object, _container.Object, Mock.Of<ILogger>());
 
             _reader.Verify(r => r.ReadTagAsync(It.IsAny<Stream>(), It.IsAny<string>()), Times.Once());
         }
@@ -61,7 +61,7 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task OnTrackUploadedAsync_Persists_The_New_Track()
         {
-            await _func.OnTrackUploadedAsync(_blob.Object, _container.Object, Mock.Of<ILogger>());
+            await _func.OnTrackUploadedAsync("", _blob.Object, _container.Object, Mock.Of<ILogger>());
 
             _db.Verify(db => db.ExecuteAsync(It.IsAny<CreateTrackCommand>()), Times.Once());
         }
@@ -69,14 +69,16 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task OnTrackUploadedAsync_Stores_Track_Artwork_If_Present()
         {
+            var name = "01/02/03/lol";
             var ct = "image/jpeg";
             _reader.Setup(r => r.ReadTagAsync(It.IsAny<Stream>(), It.IsAny<string>()))
                    .ReturnsAsync(new AudioTag { Artwork = _stream, ArtworkMimeType = ct });
 
-            await _func.OnTrackUploadedAsync(_blob.Object, _container.Object, Mock.Of<ILogger>());
+            await _func.OnTrackUploadedAsync(name, _blob.Object, _container.Object, Mock.Of<ILogger>());
 
             Assert.Equal(_ownerId.ToString(), _imageBlob.Object.Metadata["ownerid"]);
             Assert.Equal(ct, _imageBlob.Object.Properties.ContentType);
+            _container.Verify(c => c.GetBlockBlobReference(name), Times.Once());
             _imageBlob.Verify(b => b.UploadFromStream(_stream, null, null, null), Times.Once());
             _imageBlob.Verify(b => b.SetPropertiesAsync(), Times.Once());
             _imageBlob.Verify(b => b.SetMetadataAsync(), Times.Once());
@@ -94,7 +96,7 @@ namespace Rhyze.Tests.Functions
         {
             var log = new MockLogger();
 
-            await _func.OnTrackUploadedAsync(_blob.Object, _container.Object, log.Object);
+            await _func.OnTrackUploadedAsync("", _blob.Object, _container.Object, log.Object);
 
             log.Verify(Microsoft.Extensions.Logging.LogLevel.Information, "Processed New Track Id");
             log.Verify(Microsoft.Extensions.Logging.LogLevel.Trace, "Track Detail:");
@@ -108,7 +110,7 @@ namespace Rhyze.Tests.Functions
             _reader.Setup(r => r.ReadTagAsync(It.IsAny<Stream>(), It.IsAny<string>()))
                    .ThrowsAsync(e);
 
-            await _func.OnTrackUploadedAsync(_blob.Object, _container.Object, log.Object);
+            await _func.OnTrackUploadedAsync("", _blob.Object, _container.Object, log.Object);
 
             log.Verify(Microsoft.Extensions.Logging.LogLevel.Critical, $"Exception Thrown: {e}");
         }
@@ -123,7 +125,7 @@ namespace Rhyze.Tests.Functions
             _db.Setup(db => db.ExecuteAsync(It.IsAny<CreateTrackCommand>()))
                .ThrowsAsync(e);
 
-            await _func.OnTrackUploadedAsync(_blob.Object, _container.Object, log.Object);
+            await _func.OnTrackUploadedAsync("", _blob.Object, _container.Object, log.Object);
 
             _blob.Verify(b => b.DeleteAsync(), Times.Once());
             _imageBlob.Verify(b => b.DeleteAsync(), Times.Once());

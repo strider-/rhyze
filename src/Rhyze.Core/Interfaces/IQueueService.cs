@@ -14,5 +14,12 @@ namespace Rhyze.Core.Interfaces
         /// <param name="message">The <see cref="DeleteAlbumMessage"/> containing the album name and owner</param>
         /// <returns></returns>
         Task EnqueueAlbumDeletionAsync(DeleteAlbumMessage message);
+
+        /// <summary>
+        /// Enqueues an uploaded track for metadata processing
+        /// </summary>
+        /// <param name="message">The <see cref="TrackUploadedMessage"/> containing the blob name</param>
+        /// <returns></returns>
+        Task EnqueueTrackUploadedAsync(TrackUploadedMessage message);
     }
 }
