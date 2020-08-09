@@ -14,7 +14,7 @@ namespace Rhyze.Services
         private readonly IBlobStore _store;
         private readonly HMAC _hasher;
 
-        private string[] AllowedAudioContentTypes = new[] { "audio/mpeg", "audio/flac", "audio/x-flac" };
+        private readonly string[] AllowedAudioContentTypes = new[] { "audio/mpeg", "audio/flac", "audio/x-flac" };
 
         public UploadService(IBlobStore store, HMAC hasher = null)
         {

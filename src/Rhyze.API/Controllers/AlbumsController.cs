@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Rhyze.API.Commands;
-using Rhyze.API.Filters;
 using Rhyze.API.Queries;
 using Rhyze.Core.Models;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ namespace Rhyze.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [BindRequestModelsToUser]
     public class AlbumsController : ControllerBase
     {
         private readonly IMediator _mediator;
