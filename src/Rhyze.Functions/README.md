@@ -26,7 +26,8 @@ Create a `local.settings.json` file in the project root and populate it accordin
     "IsEncrypted": false,
     "Values": {
         "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "Database:ConnectionString": "<your development connection string, copy from API project settings>"
     }
 }
 ```

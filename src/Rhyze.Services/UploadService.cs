@@ -29,6 +29,11 @@ namespace Rhyze.Services
                 return new Error($"Content type of '{contentType}' is not supported.");
             }
 
+            if(ownerId == Guid.Empty)
+            {
+                return new Error("The owner id cannot be an empty guid.");
+            }
+
             // ensuring unique uploads on a user basis
             _hasher.Key = ownerId.ToByteArray();
 

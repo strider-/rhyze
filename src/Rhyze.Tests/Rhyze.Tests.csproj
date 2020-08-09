@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Rhyze.API\Rhyze.API.csproj" />
     <ProjectReference Include="..\Rhyze.Core\Rhyze.Core.csproj" />
     <ProjectReference Include="..\Rhyze.Data\Rhyze.Data.csproj" />
+    <ProjectReference Include="..\Rhyze.Functions\Rhyze.Functions.csproj" />
     <ProjectReference Include="..\Rhyze.Services\Rhyze.Services.csproj" />
   </ItemGroup>
 

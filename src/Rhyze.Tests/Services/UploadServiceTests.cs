@@ -39,6 +39,18 @@ namespace Rhyze.Tests.Services
         }
 
         [Fact]
+        public async Task UploadTrackAsync_Returns_An_Error_With_An_Invalid_Owner()
+        {
+            var ct = "audio/x-flac";
+
+            var error = await _service.UploadTrackAsync(Guid.Empty, ct, _stream);
+
+            Assert.NotNull(error);
+            Assert.Equal("The owner id cannot be an empty guid.", error.ToString());
+            _store.Verify(s => s.UploadAsync(It.IsAny<string>(), _stream, ct, It.IsAny<IDictionary<string, string>>()), Times.Never());
+        }
+
+        [Fact]
         public async Task UploadTrackAsync_Returns_Errors_From_The_Store()
         {
             var ct = "audio/mpeg";
