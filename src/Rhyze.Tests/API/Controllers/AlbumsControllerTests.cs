@@ -16,8 +16,9 @@ namespace Rhyze.Tests.API.Controllers
         {
             int skip = 10,
                 take = 2;
+            var query = new GetAlbumsQuery { Skip = skip, Take = take };
 
-            var result = await Controller.IndexAsync(skip, take);
+            var result = await Controller.IndexAsync(query);
 
             Mediator.Verify(m => m.Send(It.Is<GetAlbumsQuery>(q =>
                 q.OwnerId == PrincipalFixture.ExpectedRhyzeId &&

@@ -14,7 +14,7 @@ namespace Rhyze.Tests.API.Controllers
         public async Task MeAsync_Returns_An_Authenticated_User_From_The_Current_Context()
         {
             Mediator.Setup(m => m.Send(It.IsAny<GetAuthenticatedUserQuery>(), default))
-                     .ReturnsAsync(new AuthenticatedUser
+                     .ReturnsAsync(new Me
                      {
                          UserId = PrincipalFixture.ExpectedRhyzeId,
                          Email = PrincipalFixture.ExpectedEmail

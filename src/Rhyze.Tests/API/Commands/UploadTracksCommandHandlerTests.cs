@@ -30,7 +30,7 @@ namespace Rhyze.Tests.API.Commands
         {
             PopulateFiles(1);
             var expectedMsg = "nope";
-            var request = new UploadTracksCommand(_id, _files);
+            var request = new UploadTracksCommand { OwnerId = _id, Tracks = _files };
             _service.Setup(s => s.UploadTrackAsync(_id, _contentType, It.IsAny<Stream>()))
                     .ReturnsAsync(new Error(expectedMsg));
 
@@ -47,7 +47,7 @@ namespace Rhyze.Tests.API.Commands
         public async Task Handle_Returns_Accepted_Uploads()
         {
             PopulateFiles(1);
-            var request = new UploadTracksCommand(_id, _files);
+            var request = new UploadTracksCommand { OwnerId = _id, Tracks = _files };
             _service.Setup(s => s.UploadTrackAsync(_id, _contentType, It.IsAny<Stream>()))
                     .ReturnsAsync((Error)null);
 
@@ -64,7 +64,7 @@ namespace Rhyze.Tests.API.Commands
         public async Task Handle_Can_Process_An_Album()
         {
             PopulateFiles(12);
-            var request = new UploadTracksCommand(_id, _files);
+            var request = new UploadTracksCommand { OwnerId = _id, Tracks = _files };
             _service.SetupSequence(s => s.UploadTrackAsync(_id, _contentType, It.IsAny<Stream>()))
                     .ReturnsAsync((Error)null)
                     .ReturnsAsync((Error)null)

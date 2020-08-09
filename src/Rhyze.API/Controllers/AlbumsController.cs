@@ -18,9 +18,19 @@ namespace Rhyze.API.Controllers
         public AlbumsController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
-        public async Task<IEnumerable<Album>> IndexAsync([FromQuery] int skip = 0, [FromQuery] int take = 50)
+        public async Task<IEnumerable<Album>> IndexAsync([FromQuery] GetAlbumsQuery query)
         {
-            return await _mediator.Send(new GetAlbumsQuery(User.UserId(), skip, take));
+            query.OwnerId = User.UserId();
+
+            return await _mediator.Send(query);
+        }
+
+        [HttpGet("{name}")]
+        public async Task<IEnumerable<Track>> TracksAsync([FromRoute] GetAlbumCommand cmd)
+        {
+            cmd.OwnerId = User.UserId();
+
+            return await _mediator.Send(cmd);
         }
 
         [HttpDelete("delete")]

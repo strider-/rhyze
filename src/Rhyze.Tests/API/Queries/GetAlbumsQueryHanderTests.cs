@@ -25,7 +25,7 @@ namespace Rhyze.Tests.API.Queries
             var ownerId = Guid.NewGuid();
             int skip = 5,
                 take = 23;
-            var request = new GetAlbumsQuery(ownerId, skip, take);
+            var request = new GetAlbumsQuery { OwnerId = ownerId, Skip = skip, Take = take };
 
             await _handler.Handle(request, default);
 
@@ -42,7 +42,7 @@ namespace Rhyze.Tests.API.Queries
             var ownerId = Guid.NewGuid();
             int skip = -15,
                 take = -12;
-            var request = new GetAlbumsQuery(ownerId, skip, take);
+            var request = new GetAlbumsQuery { OwnerId = ownerId, Skip = skip, Take = take };
 
             await _handler.Handle(request, default);
 

@@ -21,12 +21,11 @@ namespace Rhyze.API.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue,
                            MemoryBufferThreshold = int.MaxValue,
                            ValueLengthLimit = int.MaxValue)]
-        public async Task<IEnumerable<UploadResult>> UploadTracksAsync([FromForm] AudioUpload model)
+        public async Task<IEnumerable<UploadResult>> UploadTracksAsync([FromForm] UploadTracksCommand cmd)
         {
-            var result = await _mediator.Send(new UploadTracksCommand(
-                ownerId: User.UserId(),
-                files: model.Tracks
-            ));
+            cmd.OwnerId = User.UserId();
+
+            var result = await _mediator.Send(cmd);
 
             return result;
         }

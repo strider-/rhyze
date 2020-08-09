@@ -4,6 +4,7 @@ using Rhyze.Data;
 using Rhyze.Data.Queries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,18 +12,13 @@ namespace Rhyze.API.Queries
 {
     public class GetAlbumsQuery : IRequest<IEnumerable<Album>>
     {
-        public GetAlbumsQuery(Guid ownerId, int skip, int take)
-        {
-            OwnerId = ownerId;
-            Skip = Math.Max(0, skip);
-            Take = Math.Max(0, take);
-        }
+        public Guid OwnerId { get; set; }
 
-        public Guid OwnerId { get; }
+        [Range(0, int.MaxValue)]
+        public int Skip { get; set; } = 0;
 
-        public int Skip { get; }
-
-        public int Take { get; }
+        [Range(0, 1000, ErrorMessage = "You can only fetch up to 1000 albums at a time.")]
+        public int Take { get; set; } = 50;
     }
 
     public class GetAlbumsQueryHandler : IRequestHandler<GetAlbumsQuery, IEnumerable<Album>>
@@ -33,7 +29,13 @@ namespace Rhyze.API.Queries
 
         public async Task<IEnumerable<Album>> Handle(GetAlbumsQuery request, CancellationToken cancellationToken)
         {
-            return await _db.ExecuteAsync(new GetAlbumListingQuery(request.OwnerId, request.Skip, request.Take));
+            var query = new GetAlbumListingQuery(
+                request.OwnerId,
+                request.Skip,
+                request.Take
+            );
+
+            return await _db.ExecuteAsync(query);
         }
     }
 }

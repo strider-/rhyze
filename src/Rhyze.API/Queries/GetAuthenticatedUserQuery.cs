@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Rhyze.API.Queries
 {
-    public class GetAuthenticatedUserQuery : IRequest<AuthenticatedUser>
+    public class GetAuthenticatedUserQuery : IRequest<Me>
     {
         public GetAuthenticatedUserQuery(ClaimsPrincipal user) => User = user;
 
         public ClaimsPrincipal User { get; }
     }
 
-    public class GetAuthenticatedUserQueryHandler : IRequestHandler<GetAuthenticatedUserQuery, AuthenticatedUser>
+    public class GetAuthenticatedUserQueryHandler : IRequestHandler<GetAuthenticatedUserQuery, Me>
     {
-        public Task<AuthenticatedUser> Handle(GetAuthenticatedUserQuery request, CancellationToken cancellationToken)
+        public Task<Me> Handle(GetAuthenticatedUserQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new AuthenticatedUser
+            return Task.FromResult(new Me
             {
                 Email = request.User.Email(),
                 UserId = request.User.UserId()

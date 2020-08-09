@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Rhyze.API.Models;
 using Rhyze.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,15 +14,11 @@ namespace Rhyze.API.Commands
 {
     public class UploadTracksCommand : IRequest<IEnumerable<UploadResult>>
     {
-        public UploadTracksCommand(Guid ownerId, IFormFileCollection files)
-        {
-            OwnerId = ownerId;
-            Files = files;
-        }
+        public Guid OwnerId { get; set; }
 
-        public Guid OwnerId { get; }
-
-        public IFormFileCollection Files { get; }
+        [FromForm(Name = "tracks")]
+        [Required(ErrorMessage = "Please supply one or more audio files in a multipart/form-data request.")]
+        public IFormFileCollection Tracks { get; set; }
     }
 
     public class UploadTracksCommandHandler : IRequestHandler<UploadTracksCommand, IEnumerable<UploadResult>>
@@ -33,7 +31,7 @@ namespace Rhyze.API.Commands
         {
             var results = new List<UploadResult>();
 
-            foreach (var file in request.Files)
+            foreach (var file in request.Tracks)
             {
                 var result = new UploadResult { Filename = file.FileName };
 

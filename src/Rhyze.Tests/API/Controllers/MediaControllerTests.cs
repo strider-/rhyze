@@ -17,10 +17,10 @@ namespace Rhyze.Tests.API.Controllers
         [Fact]
         public async Task UploadTracksAsync_Returns_Individual_Upload_Results()
         {
-            var expectedResult = new List<UploadResult>() { 
-                new UploadResult { Filename = "test", Status = UploadStatus.Accepted } 
+            var expectedResult = new List<UploadResult>() {
+                new UploadResult { Filename = "test", Status = UploadStatus.Accepted }
             };
-            var model = new AudioUpload
+            var model = new UploadTracksCommand
             {
                 Tracks = new FormFileCollection()
             };
@@ -31,7 +31,7 @@ namespace Rhyze.Tests.API.Controllers
 
             Assert.Equal(expectedResult, result);
             Mediator.Verify(m => m.Send(It.Is<UploadTracksCommand>(
-                c => c.OwnerId == PrincipalFixture.ExpectedRhyzeId && c.Files == model.Tracks), default)
+                c => c.OwnerId == PrincipalFixture.ExpectedRhyzeId && c.Tracks == model.Tracks), default)
             );
         }
     }
