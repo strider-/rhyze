@@ -13,6 +13,7 @@ Business logic utilizing models and implementing contracts defined in the Core p
 
 ## Project Documentation
 
-* `AzureBlobStore : IBlobStore` - Blob management using Azure storage.
-* `UploadService  : IUploadService` - Business logic for handing audio/image uploads from the API.
-* `TagLibReader   : ITagReader` - Read audio metadata tags using TagLib Sharp.
+* `AzureBlobStore    : IBlobStore` - Blob management using Azure storage.
+* `UploadService     : IUploadService` - Business logic for handing audio/image uploads from the API.
+* `TagLibReader      : ITagReader` - Read audio metadata tags using TagLib Sharp.
+* `AzureQueueService : IQueueService` - Enqueue messages to be picked up by the Functions project

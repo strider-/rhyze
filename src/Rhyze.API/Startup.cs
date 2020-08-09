@@ -32,7 +32,8 @@ namespace Rhyze.API
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IUploadService, UploadService>()
-                    .AddScoped<IBlobStore>(p => new AzureBlobStore(Configuration.GetValue<string>("Storage:ConnectionString")));
+                    .AddScoped<IBlobStore>(p => new AzureBlobStore(Configuration.GetValue<string>("Storage:ConnectionString")))
+                    .AddScoped<IQueueService>(p => new AzureQueueService(Configuration.GetValue<string>("Queue:ConnectionString")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

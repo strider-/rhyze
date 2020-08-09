@@ -12,6 +12,6 @@ namespace Rhyze.Core.Interfaces
         /// </summary>
         /// <param name="albumName"></param>
         /// <returns></returns>
-        Task EnqueueAlbumDeletion(string albumName);
+        Task EnqueueAlbumDeletionAsync(string albumName);
     }
 }

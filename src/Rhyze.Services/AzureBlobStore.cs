@@ -20,6 +20,9 @@ namespace Rhyze.Services
             _client = new BlobServiceClient(connectionString);
         }
 
+        /// <summary>
+        /// This contructor is primarily for testing and is not meant to be used by your code.
+        /// </summary>
         public AzureBlobStore(BlobServiceClient client) => _client = client;
 
         public Task<Error> DeleteAsync(string blobPath)
