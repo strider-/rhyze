@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Rhyze.API.Commands;
-using Rhyze.API.Extensions;
+using Rhyze.API.Filters;
 using Rhyze.API.Queries;
 using Rhyze.Core.Models;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ namespace Rhyze.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [BindRequestModelsToUser]
     public class AlbumsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -20,24 +21,18 @@ namespace Rhyze.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<Album>> IndexAsync([FromQuery] GetAlbumsQuery query)
         {
-            query.OwnerId = User.UserId();
-
             return await _mediator.Send(query);
         }
 
         [HttpGet("{name}")]
         public async Task<IEnumerable<Track>> TracksAsync([FromRoute] GetAlbumCommand cmd)
         {
-            cmd.OwnerId = User.UserId();
-
             return await _mediator.Send(cmd);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteAsync([FromBody] DeleteAlbumCommand cmd)
         {
-            cmd.OwnerId = User.UserId();
-
             await _mediator.Send(cmd);
 
             return NoContent();

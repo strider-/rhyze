@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rhyze.API.Extensions;
+using Rhyze.API.Filters;
 using Rhyze.Core.Interfaces;
 using Rhyze.Services;
 using System.Reflection;
@@ -25,7 +26,14 @@ namespace Rhyze.API
         {
             services.AddDataAccessLayer(Configuration.GetSection("Database"));
 
-            services.AddControllers(options => options.Filters.Add(new AuthorizeFilter()));
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter());
+
+                // when implmenting the IRequireAnOwner interface on request models,
+                // this attribute sets the OwnerId property to the authenticated user id.
+                options.Filters.Add(new BindRequestModelsToUserAttribute());
+            });
 
             services.AddJwtAuthentication(Configuration.GetSection("Authentication:Jwt"));
 

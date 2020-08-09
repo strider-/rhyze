@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Rhyze.API.Commands
 {
-    public class UploadTracksCommand : IRequest<IEnumerable<UploadResult>>
+    public class UploadTracksCommand : IRequest<IEnumerable<UploadResult>>, IRequireAnOwner
     {
         public Guid OwnerId { get; set; }
 

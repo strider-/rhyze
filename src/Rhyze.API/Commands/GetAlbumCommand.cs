@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Rhyze.API.Models;
 using Rhyze.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Rhyze.API.Commands
 {
-    public class GetAlbumCommand : IRequest<IEnumerable<Track>>
+    public class GetAlbumCommand : IRequest<IEnumerable<Track>>, IRequireAnOwner
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "You need to provide an album name!")]
         public string Name { get; set; }

@@ -23,8 +23,6 @@ namespace Rhyze.API.Controllers
                            ValueLengthLimit = int.MaxValue)]
         public async Task<IEnumerable<UploadResult>> UploadTracksAsync([FromForm] UploadTracksCommand cmd)
         {
-            cmd.OwnerId = User.UserId();
-
             var result = await _mediator.Send(cmd);
 
             return result;

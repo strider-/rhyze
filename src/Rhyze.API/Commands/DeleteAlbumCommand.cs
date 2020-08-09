@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Rhyze.API.Models;
 using Rhyze.Core.Interfaces;
 using Rhyze.Core.Messages;
 using Rhyze.Data;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Rhyze.API.Commands
 {
-    public class DeleteAlbumCommand : IRequest
+    public class DeleteAlbumCommand : IRequest, IRequireAnOwner
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify the album name to delete.")]
         public string Name { get; set; }

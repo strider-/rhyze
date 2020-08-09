@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Rhyze.API.Models;
 using Rhyze.Core.Models;
 using Rhyze.Data;
 using Rhyze.Data.Queries;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Rhyze.API.Queries
 {
-    public class GetAlbumsQuery : IRequest<IEnumerable<Album>>
+    public class GetAlbumsQuery : IRequest<IEnumerable<Album>>, IRequireAnOwner
     {
         public Guid OwnerId { get; set; }
 
