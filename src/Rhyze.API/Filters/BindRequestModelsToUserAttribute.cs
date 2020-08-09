@@ -15,9 +15,9 @@ namespace Rhyze.API.Filters
         {
             public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
             {
-                foreach(var arg in context.ActionArguments.Where(kvp => kvp.Value is IRequireAnOwner))
+                foreach(var arg in context.ActionArguments.Where(kvp => kvp.Value is RequireAnOwner))
                 {
-                    (arg.Value as IRequireAnOwner).OwnerId = context.HttpContext.User.UserId();
+                    (arg.Value as RequireAnOwner).OwnerId = context.HttpContext.User.UserId();
                 }
 
                 await next();

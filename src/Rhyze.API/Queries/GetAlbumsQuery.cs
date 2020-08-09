@@ -11,10 +11,8 @@ using System.Threading.Tasks;
 
 namespace Rhyze.API.Queries
 {
-    public class GetAlbumsQuery : IRequest<IEnumerable<Album>>, IRequireAnOwner
+    public class GetAlbumsQuery : RequireAnOwner, IRequest<IEnumerable<Album>>
     {
-        public Guid OwnerId { get; set; }
-
         [Range(0, int.MaxValue)]
         public int Skip { get; set; } = 0;
 

@@ -4,19 +4,16 @@ using Rhyze.Core.Interfaces;
 using Rhyze.Core.Messages;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Rhyze.API.Commands
 {
-    public class DeleteAlbumCommand : IRequest, IRequireAnOwner
+    public class DeleteAlbumCommand : RequireAnOwner, IRequest
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify the album name to delete.")]
         public string Name { get; set; }
-
-        public Guid OwnerId { get; set; }
     }
 
     public class DeleteAlbumCommandHandler : IRequestHandler<DeleteAlbumCommand, Unit>
