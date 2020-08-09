@@ -5,22 +5,22 @@ using Xunit;
 
 namespace Rhyze.Tests.API.Queries
 {
-    [Trait("API.Queries", nameof(GetAuthenticatedUserQueryHandler))]
-    public class GetAuthenticatedUserQueryHandlerTests
+    [Trait("API.Queries", nameof(GetMyselfHandler))]
+    public class GetMyselfQueryHandlerTests
     {
-        private readonly GetAuthenticatedUserQueryHandler _handler;
+        private readonly GetMyselfHandler _handler;
         private readonly ClaimsPrincipalFixture _fixture;
 
-        public GetAuthenticatedUserQueryHandlerTests()
+        public GetMyselfQueryHandlerTests()
         {
             _fixture = new ClaimsPrincipalFixture().WithRhyzeId();
-            _handler = new GetAuthenticatedUserQueryHandler();
+            _handler = new GetMyselfHandler();
         }
 
         [Fact]
         public async Task Handle_Returns_The_Authenticated_User()
         {
-            var request = new GetAuthenticatedUserQuery(_fixture.User);
+            var request = new GetMyselfQuery(_fixture.User);
 
             var result = await _handler.Handle(request, default);
 

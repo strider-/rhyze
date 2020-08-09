@@ -16,7 +16,7 @@ namespace Rhyze.API.Controllers
         [Route("/me")]
         public async Task<Me> MeAsync()
         {
-            return await _mediator.Send(new GetAuthenticatedUserQuery(User));
+            return await _mediator.Send(new GetMyselfQuery(User));
         }
     }
 }

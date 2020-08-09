@@ -51,6 +51,14 @@ namespace Rhyze.Tests.Functions
         }
 
         [Fact]
+        public async Task OnTrackUploadedAsync_Fetches_Blob_Metadata()
+        {
+            await _func.OnTrackUploadedAsync("", _blob.Object, _container.Object, Mock.Of<ILogger>());
+
+            _blob.Verify(b => b.FetchAttributesAsync(), Times.Once());
+        }
+
+        [Fact]
         public async Task OnTrackUploadedAsync_Reads_Metadata()
         {
             await _func.OnTrackUploadedAsync("", _blob.Object, _container.Object, Mock.Of<ILogger>());
