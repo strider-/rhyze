@@ -1,5 +1,7 @@
 # Rhyze - Streaming Music Service
 
+[![Build Status](https://dev.azure.com/strideriidx/Rhyze/_apis/build/status/strider-.rhyze?branchName=master)](https://dev.azure.com/strideriidx/Rhyze/_build/latest?definitionId=2&branchName=master)
+
 ## Getting Started
 
 Running `docker-compose up` will start the MSSQL Server and Azurite, the open source Azure storage emulator. 
