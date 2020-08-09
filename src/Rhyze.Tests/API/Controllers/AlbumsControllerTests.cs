@@ -16,7 +16,7 @@ namespace Rhyze.Tests.API.Controllers
         {
             int skip = 10,
                 take = 2;
-            var query = new GetAlbumsQuery { Skip = skip, Take = take };
+            var query = new GetAlbumsQuery { OwnerId = PrincipalFixture.ExpectedRhyzeId, Skip = skip, Take = take };
 
             var result = await Controller.IndexAsync(query);
 

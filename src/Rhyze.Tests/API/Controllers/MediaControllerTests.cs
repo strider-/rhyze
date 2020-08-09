@@ -22,6 +22,7 @@ namespace Rhyze.Tests.API.Controllers
             };
             var model = new UploadTracksCommand
             {
+                OwnerId = PrincipalFixture.ExpectedRhyzeId,
                 Tracks = new FormFileCollection()
             };
             Mediator.Setup(m => m.Send(It.IsAny<UploadTracksCommand>(), default))
