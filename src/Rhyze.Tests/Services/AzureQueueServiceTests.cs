@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Queues;
 using Moq;
+using Rhyze.Core.Messages;
 using Rhyze.Services;
 using System;
 using System.Text;
@@ -28,8 +29,9 @@ namespace Rhyze.Tests.Services
         public async Task EnqueueAlbumDeletionAsync_Ensures_The_Queue_Exists()
         {
             var expectedQueueName = AzureQueueService.AlbumDeletionQueue;
+            var msg = new DeleteAlbumMessage { };
 
-            await _service.EnqueueAlbumDeletionAsync(Guid.Empty, "");
+            await _service.EnqueueAlbumDeletionAsync(msg);
 
             Assert.Equal(expectedQueueName, _client.Object.Name);
             _client.Verify(c => c.CreateIfNotExistsAsync(null, default), Times.Once());
@@ -40,11 +42,12 @@ namespace Rhyze.Tests.Services
         {
             var albumName = "Cafe de Touhou 8";
             var ownerId = Guid.Empty;
+            var msg = new DeleteAlbumMessage { AlbumName = albumName, OwnerId = ownerId };
             var json = $"{{\"AlbumName\":\"{albumName}\",\"OwnerId\":\"{ownerId}\"}}";
 
             var expectedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
 
-            await _service.EnqueueAlbumDeletionAsync(Guid.Empty, albumName);
+            await _service.EnqueueAlbumDeletionAsync(msg);
 
             _client.Verify(c => c.SendMessageAsync(expectedMessage), Times.Once());
         }

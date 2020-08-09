@@ -18,7 +18,7 @@ namespace Rhyze.Data.Commands
             await conn.ExecuteNonQueryAsync("UPDATE Tracks SET SoftDelete = 1 WHERE Album = @Album AND OwnerId = @OwnerId", new
             {
                 Album = AlbumName,
-                OwnerId = OwnerId
+                OwnerId
             });
         }
 

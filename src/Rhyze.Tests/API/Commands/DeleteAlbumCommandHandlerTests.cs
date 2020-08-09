@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Rhyze.API.Commands;
 using Rhyze.Core.Interfaces;
+using Rhyze.Core.Messages;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
 using System;
@@ -43,7 +44,9 @@ namespace Rhyze.Tests.API.Commands
 
             await _hander.Handle(request, default);
 
-            _service.Verify(s => s.EnqueueAlbumDeletionAsync(id, expectedName), Times.Once());
+            _service.Verify(s => s.EnqueueAlbumDeletionAsync(It.Is<DeleteAlbumMessage>(m =>
+                m.AlbumName == expectedName && m.OwnerId == id
+            )), Times.Once());
         }
     }
 }

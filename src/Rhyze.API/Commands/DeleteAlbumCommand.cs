@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Rhyze.Core.Interfaces;
+using Rhyze.Core.Messages;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
 using System;
@@ -32,7 +33,11 @@ namespace Rhyze.API.Commands
         {
             await _db.ExecuteAsync(new SoftDeleteAlbumCommand(request.OwnerId, request.Name));
 
-            await _service.EnqueueAlbumDeletionAsync(request.OwnerId, request.Name);
+            await _service.EnqueueAlbumDeletionAsync(new DeleteAlbumMessage
+            {
+                OwnerId = request.OwnerId,
+                AlbumName = request.Name
+            });
 
             return Unit.Value;
         }

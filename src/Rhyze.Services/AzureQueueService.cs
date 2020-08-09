@@ -29,11 +29,7 @@ namespace Rhyze.Services
             _clientFactory = factory;
         }
 
-        public Task EnqueueAlbumDeletionAsync(Guid ownerId, string albumName) => EnqueueAsync(AlbumDeletionQueue, new DeleteAlbumMessage
-        {
-            AlbumName = albumName,
-            OwnerId = ownerId
-        });
+        public Task EnqueueAlbumDeletionAsync(DeleteAlbumMessage message) => EnqueueAsync(AlbumDeletionQueue, message);
 
         private async Task EnqueueAsync<T>(string queueName, T message)
         {
