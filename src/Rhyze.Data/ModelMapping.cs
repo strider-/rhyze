@@ -34,6 +34,10 @@ namespace Rhyze.Data
                 .Column(t => t.LastPlayedUtc, "[LastPlayedUtc]")
                 .Column(t => t.PlayCount, "[PlayCount]")
                 .Column(t => t.OwnerId, "[OwnerId]");
+
+            FluentMapper.Entity<Album>()
+                .Column(a => a.Name, "[Album]")
+                .Column(a => a.Artist, "[AlbumArtist]");
         }
     }
 }

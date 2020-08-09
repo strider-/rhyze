@@ -1,10 +1,8 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Moq;
 using Rhyze.API.Commands;
 using Rhyze.API.Controllers;
 using Rhyze.API.Models;
-using Rhyze.Tests.Fixtures;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -12,16 +10,9 @@ using Xunit;
 namespace Rhyze.Tests.API.Controllers
 {
     [Trait(nameof(Controllers), nameof(MediaController))]
-    public class MediaControllerTests
+    public class MediaControllerTests : MediatorControllerTestsBase<MediaController>
     {
-        private readonly MediaController _controller;
-        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
-        private readonly ClaimsPrincipalFixture _fixture = new ClaimsPrincipalFixture().WithRhyzeId();
-
-        public MediaControllerTests()
-        {
-            _controller = MediatorControllerGenerator.Create<MediaController>(_fixture, _mediator);
-        }
+        public MediaControllerTests() => UserHasRhyzeId();
 
         [Fact]
         public async Task UploadTracksAsync_Returns_Individual_Upload_Results()
@@ -33,14 +24,14 @@ namespace Rhyze.Tests.API.Controllers
             {
                 Tracks = new FormFileCollection()
             };
-            _mediator.Setup(m => m.Send(It.IsAny<UploadTracksCommand>(), default))
+            Mediator.Setup(m => m.Send(It.IsAny<UploadTracksCommand>(), default))
                      .ReturnsAsync(expectedResult);
 
-            var result = await _controller.UploadTracksAsync(model);
+            var result = await Controller.UploadTracksAsync(model);
 
             Assert.Equal(expectedResult, result);
-            _mediator.Verify(m => m.Send(It.Is<UploadTracksCommand>(
-                c => c.OwnerId == _fixture.ExpectedRhyzeId && c.Files == model.Tracks), default)
+            Mediator.Verify(m => m.Send(It.Is<UploadTracksCommand>(
+                c => c.OwnerId == PrincipalFixture.ExpectedRhyzeId && c.Files == model.Tracks), default)
             );
         }
     }
