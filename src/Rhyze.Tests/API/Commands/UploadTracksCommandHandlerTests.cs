@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Rhyze.Tests.API.Commands
 {
-    [Trait(nameof(Commands), nameof(UploadTracksCommandHandler))]
+    [Trait("API.Commands", nameof(UploadTracksCommandHandler))]
     public class UploadTracksCommandHandlerTests
     {
         private readonly string _contentType = "audio/mpeg";

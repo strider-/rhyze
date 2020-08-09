@@ -6,16 +6,16 @@ namespace Rhyze.Data.Commands
 {
     public class SoftDeleteAlbumCommand : ICommandAsync
     {
-        private readonly string _name;
-
-        public SoftDeleteAlbumCommand(string name) => _name = name;
+        public SoftDeleteAlbumCommand(string name) => AlbumName = name;
 
         public async Task ExecuteAsync(IDbConnection conn)
         {
             await conn.ExecuteNonQueryAsync("UPDATE Tracks SET SoftDelete = 1 WHERE Album = @Album", new
             {
-                Album = _name
+                Album = AlbumName
             });
         }
+
+        public string AlbumName { get; }
     }
 }
