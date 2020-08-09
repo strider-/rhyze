@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Storage.Blob;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using Rhyze.Core.Messages;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
 using Rhyze.Data.Queries;
@@ -18,15 +19,15 @@ namespace Rhyze.Functions
 
         [FunctionName("DequeueAlbumDeletion")]
         public async Task DequeueAlbumDeletionAsync(
-            [QueueTrigger(AzureQueueService.AlbumDeletionQueue)] string albumName,
+            [QueueTrigger(AzureQueueService.AlbumDeletionQueue)] DeleteAlbumMessage msg,
             [Blob("audio", FileAccess.Write)] CloudBlobContainer audioContainer,
             [Blob("image", FileAccess.Write)] CloudBlobContainer imageContainer,
             ILogger log
         )
         {
-            log.LogInformation($"Recieved album to delete: {albumName}");
+            log.LogInformation($"Recieved album to delete: {msg.AlbumName}");
 
-            var tracks = await _db.ExecuteAsync(new GetAlbumByNameQuery(albumName));
+            var tracks = await _db.ExecuteAsync(new GetAlbumByNameQuery(msg.OwnerId, msg.AlbumName));
 
             foreach (var track in tracks)
             {
@@ -49,7 +50,7 @@ namespace Rhyze.Functions
 
             await _db.ExecuteAsync(new HardDeleteAlbumCommand(tracks));
 
-            log.LogInformation($"{albumName} has been deleted.");
+            log.LogInformation($"{msg.AlbumName} has been deleted.");
         }
     }
 }

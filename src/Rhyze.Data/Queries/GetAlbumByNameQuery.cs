@@ -1,6 +1,7 @@
 ﻿using RepoDb;
 using RepoDb.Enumerations;
 using Rhyze.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -11,7 +12,13 @@ namespace Rhyze.Data.Queries
     {
         public string AlbumName { get; }
 
-        public GetAlbumByNameQuery(string name) => AlbumName = name;
+        public Guid OwnerId { get; }
+
+        public GetAlbumByNameQuery(Guid ownerId, string name)
+        {
+            OwnerId = ownerId;
+            AlbumName = name;
+        }
 
         public async Task<IEnumerable<Track>> ExecuteAsync(IDbConnection conn)
         {
@@ -21,7 +28,7 @@ namespace Rhyze.Data.Queries
                 TrackNo = Order.Ascending
             });
 
-            return await conn.QueryAsync<Track>(t => t.Album == AlbumName, orderBy: order);
+            return await conn.QueryAsync<Track>(t => t.OwnerId == OwnerId && t.Album == AlbumName, orderBy: order);
         }
     }
 }

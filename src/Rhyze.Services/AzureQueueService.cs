@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Queues;
 using Rhyze.Core.Interfaces;
+using Rhyze.Core.Messages;
 using System;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Rhyze.Services
@@ -27,15 +29,21 @@ namespace Rhyze.Services
             _clientFactory = factory;
         }
 
-        public Task EnqueueAlbumDeletionAsync(string albumName) => EnqueueAsync(AlbumDeletionQueue, albumName);
+        public Task EnqueueAlbumDeletionAsync(Guid ownerId, string albumName) => EnqueueAsync(AlbumDeletionQueue, new DeleteAlbumMessage
+        {
+            AlbumName = albumName,
+            OwnerId = ownerId
+        });
 
-        private async Task EnqueueAsync(string queueName, string message)
+        private async Task EnqueueAsync<T>(string queueName, T message)
         {
             var client = _clientFactory(_connStr, queueName);
 
             await client.CreateIfNotExistsAsync();
 
-            var payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(message));
+            var json = JsonSerializer.Serialize(message);
+
+            var payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
 
             await client.SendMessageAsync(payload);
         }

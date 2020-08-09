@@ -3,6 +3,7 @@ using Rhyze.API.Commands;
 using Rhyze.Core.Interfaces;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -37,11 +38,12 @@ namespace Rhyze.Tests.API.Commands
         public async Task Handle_Enqueues_Hard_Deletion()
         {
             var expectedName = "EXIT TUNES PRESENTS Vocaloconnection feat. 初音ミク";
-            var request = new DeleteAlbumCommand { Name = expectedName };
+            var id = Guid.NewGuid();
+            var request = new DeleteAlbumCommand { Name = expectedName, OwnerId = id };
 
             await _hander.Handle(request, default);
 
-            _service.Verify(s => s.EnqueueAlbumDeletionAsync(expectedName), Times.Once());
+            _service.Verify(s => s.EnqueueAlbumDeletionAsync(id, expectedName), Times.Once());
         }
     }
 }

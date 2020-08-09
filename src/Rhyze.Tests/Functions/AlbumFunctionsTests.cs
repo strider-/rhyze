@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Rhyze.Core.Messages;
 using Rhyze.Core.Models;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
@@ -17,6 +18,7 @@ namespace Rhyze.Tests.Functions
     [Trait(nameof(Functions), nameof(AlbumFunctions))]
     public class AlbumFunctionsTests
     {
+        private readonly Guid _ownerId = Guid.NewGuid();
         private readonly AlbumFunctions _func;
         private readonly Mock<IDatabase> _db = new Mock<IDatabase>();
         private readonly Mock<CloudBlobContainer> _audioContainer = new Mock<CloudBlobContainer>(new Uri("http://store/audio"));
@@ -38,21 +40,28 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Fetches_Album_Tracks()
         {
-            var albumName = "ARCHVS";
+            var msg = new DeleteAlbumMessage
+            {
+                AlbumName = "ARCHVS",
+                OwnerId = _ownerId
+            };
 
-            await _func.DequeueAlbumDeletionAsync(albumName, _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
+            await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
 
-            _db.Verify(db => db.ExecuteAsync(It.Is<GetAlbumByNameQuery>(q => q.AlbumName == albumName)), Times.Once());
+            _db.Verify(db => db.ExecuteAsync(It.Is<GetAlbumByNameQuery>(
+                q => q.AlbumName == msg.AlbumName && q.OwnerId == _ownerId)
+            ), Times.Once());
         }
 
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Deletes_Existing_Blobs()
         {
+            var msg = new DeleteAlbumMessage { };
             var tracks = MultipleTracks();
             _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByNameQuery>()))
                .ReturnsAsync(tracks);
 
-            await _func.DequeueAlbumDeletionAsync("", _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
+            await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
 
             _audioBlob.Verify(b => b.DeleteIfExistsAsync(), Times.Exactly(2));
             _imageBlob.Verify(b => b.DeleteIfExistsAsync(), Times.Once());
@@ -61,11 +70,12 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Hard_Deletes_The_Album()
         {
+            var msg = new DeleteAlbumMessage { };
             var tracks = SingleTrack();
             _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByNameQuery>()))
                .ReturnsAsync(tracks);
 
-            await _func.DequeueAlbumDeletionAsync("", _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
+            await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
 
             _db.Verify(db => db.ExecuteAsync(It.Is<HardDeleteAlbumCommand>(q => q.ToBeDeleted == tracks)), Times.Once());
         }
@@ -73,18 +83,22 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Writes_To_The_Log()
         {
-            var albumName = "Opium and Purple Haze EP";
+            var msg = new DeleteAlbumMessage
+            {
+                AlbumName = "Opium and Purple Haze EP",
+                OwnerId = _ownerId
+            };
             var log = new MockLogger();
             _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByNameQuery>()))
                .ReturnsAsync(SingleTrack());
 
-            await _func.DequeueAlbumDeletionAsync(albumName, _audioContainer.Object, _imageContainer.Object, log.Object);
+            await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, log.Object);
 
-            log.Verify(LogLevel.Information, $"Recieved album to delete: {albumName}");
+            log.Verify(LogLevel.Information, $"Recieved album to delete: {msg.AlbumName}");
             log.Verify(LogLevel.Trace, $"Deleting Track '01' (name: file)");
             log.Verify(LogLevel.Trace, "\tAudio blob deleted.");
             log.Verify(LogLevel.Trace, "\tImage blob deleted.");
-            log.Verify(LogLevel.Information, $"{albumName} has been deleted.");
+            log.Verify(LogLevel.Information, $"{msg.AlbumName} has been deleted.");
         }
 
         private Track[] SingleTrack()

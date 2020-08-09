@@ -29,7 +29,7 @@ namespace Rhyze.Tests.Services
         {
             var expectedQueueName = AzureQueueService.AlbumDeletionQueue;
 
-            await _service.EnqueueAlbumDeletionAsync("");
+            await _service.EnqueueAlbumDeletionAsync(Guid.Empty, "");
 
             Assert.Equal(expectedQueueName, _client.Object.Name);
             _client.Verify(c => c.CreateIfNotExistsAsync(null, default), Times.Once());
@@ -39,9 +39,12 @@ namespace Rhyze.Tests.Services
         public async Task EnqueueAlbumDeletionAsync_Enqueues_A_Base_64_Message()
         {
             var albumName = "Cafe de Touhou 8";
-            var expectedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(albumName));
+            var ownerId = Guid.Empty;
+            var json = $"{{\"AlbumName\":\"{albumName}\",\"OwnerId\":\"{ownerId}\"}}";
 
-            await _service.EnqueueAlbumDeletionAsync(albumName);
+            var expectedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+
+            await _service.EnqueueAlbumDeletionAsync(Guid.Empty, albumName);
 
             _client.Verify(c => c.SendMessageAsync(expectedMessage), Times.Once());
         }

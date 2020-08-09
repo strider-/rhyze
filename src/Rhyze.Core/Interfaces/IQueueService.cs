@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Rhyze.Core.Interfaces
 {
@@ -10,8 +11,9 @@ namespace Rhyze.Core.Interfaces
         /// <summary>
         /// Enqueues the deletion of a given album
         /// </summary>
-        /// <param name="albumName"></param>
+        /// <param name="ownerId">The unique identifier of the user who uploaded the album</param>
+        /// <param name="albumName">The name of the album to delete</param>
         /// <returns></returns>
-        Task EnqueueAlbumDeletionAsync(string albumName);
+        Task EnqueueAlbumDeletionAsync(Guid ownerId, string albumName);
     }
 }

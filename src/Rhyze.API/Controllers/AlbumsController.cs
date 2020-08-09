@@ -26,6 +26,8 @@ namespace Rhyze.API.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteAsync([FromBody] DeleteAlbumCommand cmd)
         {
+            cmd.OwnerId = User.UserId();
+
             await _mediator.Send(cmd);
 
             return NoContent();
