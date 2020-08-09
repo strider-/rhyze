@@ -9,9 +9,9 @@ namespace Rhyze.Data.Queries
 {
     public class GetAlbumByNameQuery : IQueryAsync<IEnumerable<Track>>
     {
-        private readonly string _name;
+        public string AlbumName { get; }
 
-        public GetAlbumByNameQuery(string name) => _name = name;
+        public GetAlbumByNameQuery(string name) => AlbumName = name;
 
         public async Task<IEnumerable<Track>> ExecuteAsync(IDbConnection conn)
         {
@@ -21,7 +21,7 @@ namespace Rhyze.Data.Queries
                 TrackNo = Order.Ascending
             });
 
-            return await conn.QueryAsync<Track>(t => t.Album == _name, orderBy: order);
+            return await conn.QueryAsync<Track>(t => t.Album == AlbumName, orderBy: order);
         }
     }
 }

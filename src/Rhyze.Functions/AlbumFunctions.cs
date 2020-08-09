@@ -41,6 +41,10 @@ namespace Rhyze.Functions
                     await imageContainer.GetBlockBlobReference(name).DeleteIfExistsAsync();
                     log.LogTrace("\tImage blob deleted.");
                 }
+                else
+                {
+                    log.LogTrace("\tNo image blob for this track.");
+                }
             }
 
             await _db.ExecuteAsync(new HardDeleteAlbumCommand(tracks));

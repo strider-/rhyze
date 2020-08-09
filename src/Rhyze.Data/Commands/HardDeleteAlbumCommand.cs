@@ -13,13 +13,13 @@ namespace Rhyze.Data.Commands
         // A user could delete an album & immediately start to re-upload it,
         // and deleting by album name could have adverse effects in that scenario.
 
-        private readonly IEnumerable<Track> _tracks;
+        public IEnumerable<Track> ToBeDeleted { get; }
 
-        public HardDeleteAlbumCommand(IEnumerable<Track> tracks) => _tracks = tracks;
+        public HardDeleteAlbumCommand(IEnumerable<Track> tracks) => ToBeDeleted = tracks;
 
         public async Task ExecuteAsync(IDbConnection conn)
         {
-            var ids = _tracks.Select(t => t.Id).Cast<object>();
+            var ids = ToBeDeleted.Select(t => t.Id).Cast<object>();
 
             await conn.DeleteAllAsync<Track>(primaryKeys: ids);
         }
