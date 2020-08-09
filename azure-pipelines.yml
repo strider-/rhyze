@@ -13,7 +13,7 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration) ./src/
   displayName: 'dotnet build $(buildConfiguration)'
   
-- task: DotNetCoreCLI@2
+- task: DotNetCoreCLI@3
   inputs:
     command: 'test'
     projects: './src/Rhyze.Tests/Rhyze.Tests.csproj'
