@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Rhyze.Core.Interfaces;
+using Rhyze.Data;
+using Rhyze.Data.Commands;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,11 +17,18 @@ namespace Rhyze.API.Commands
     public class DeleteAlbumCommandHandler : IRequestHandler<DeleteAlbumCommand, Unit>
     {
         private readonly IQueueService _service;
+        private readonly IDatabase _db;
 
-        public DeleteAlbumCommandHandler(IQueueService service) => _service = service;
+        public DeleteAlbumCommandHandler(IQueueService service, IDatabase db)
+        {
+            _service = service;
+            _db = db;
+        }
 
         public async Task<Unit> Handle(DeleteAlbumCommand request, CancellationToken cancellationToken)
         {
+            await _db.ExecuteAsync(new SoftDeleteAlbumCommand(request.Name));
+
             await _service.EnqueueAlbumDeletionAsync(request.Name);
 
             return Unit.Value;
