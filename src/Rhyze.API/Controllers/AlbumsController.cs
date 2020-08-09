@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Rhyze.API.Commands;
+using Rhyze.API.Models;
 using Rhyze.API.Queries;
 using Rhyze.Core.Models;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Rhyze.API.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<IEnumerable<Track>> TracksAsync([FromRoute] GetAlbumQuery query)
+        public async Task<IEnumerable<TrackVM>> TracksAsync([FromRoute] GetAlbumQuery query)
         {
             return await _mediator.Send(query);
         }
