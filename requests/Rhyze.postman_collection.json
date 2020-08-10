@@ -138,6 +138,108 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Albums",
+			"item": [
+				{
+					"name": "GET /albums",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{user.jwt}}"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:5001/albums?skip=0&take=50",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"albums"
+							],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "take",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /albums/delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user.jwt}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/albums/delete",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"albums",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /album/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user.jwt}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:5001/albums/<album id>",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"albums",
+								"<album id>"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "GET /me",
 			"request": {
 				"auth": {
@@ -202,66 +304,6 @@
 						"media",
 						"upload",
 						"tracks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET /albums",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{user.jwt}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "https://localhost:5001/albums",
-					"protocol": "https",
-					"host": [
-						"localhost"
-					],
-					"port": "5001",
-					"path": [
-						"albums"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "DELETE /albums/delete",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{user.jwt}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "https://localhost:5001/albums/delete",
-					"protocol": "https",
-					"host": [
-						"localhost"
-					],
-					"port": "5001",
-					"path": [
-						"albums",
-						"delete"
 					]
 				}
 			},
