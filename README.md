@@ -23,6 +23,7 @@ See individual project READMEs for further detail
     /Rhyze.Core      - Core foundation (interfaces, models, etc)
     /Rhyze.Functions - Post-upload processing functions
     /Rhyze.Data      - Data access layer
+    /rhyze.frontend  - Web UI project
     /Rhyze.Services  - Business logic
     /Rhyze.Tests     - Unit and integration tests
  vol                 - Docker volume mount root
