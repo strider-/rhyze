@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rhyze.API.Commands
+namespace Rhyze.API.Queries
 {
     public class GetAlbumQuery : RequireAnOwner, IRequest<IEnumerable<TrackVM>>
     {

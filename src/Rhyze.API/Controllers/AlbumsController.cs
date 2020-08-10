@@ -29,6 +29,12 @@ namespace Rhyze.API.Controllers
             return await _mediator.Send(query);
         }
 
+        [HttpGet("{albumId}/metadata")]
+        public async Task<AlbumMetadata> AlbumMetadataAsync([FromRoute] GetAlbumMetadataQuery query)
+        {
+            return await _mediator.Send(query);
+        }
+
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteAsync([FromBody] DeleteAlbumCommand cmd)
         {

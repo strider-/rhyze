@@ -1,5 +1,5 @@
 ﻿using Moq;
-using Rhyze.API.Commands;
+using Rhyze.API.Queries;
 using Rhyze.Core.Models;
 using Rhyze.Data;
 using Rhyze.Data.Queries;
