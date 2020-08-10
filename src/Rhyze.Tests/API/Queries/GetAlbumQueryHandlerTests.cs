@@ -24,13 +24,15 @@ namespace Rhyze.Tests.API.Queries
         [Fact]
         public async Task Handle_Executes_The_Expected_Database_Query()
         {
-            var name = "Re：End of a Dream";
-            var request = new GetAlbumQuery { Name = name, OwnerId = _ownerId };
+            var albumId = new AlbumId("uma vs. モリモリあつし", "Re：End of a Dream");
+            var request = new GetAlbumQuery { AlbumId = albumId, OwnerId = _ownerId };
 
             await _handler.Handle(request, default);
 
-            _db.Verify(db => db.ExecuteAsync(It.Is<GetAlbumByNameQuery>(q =>
-                q.AlbumName == name && q.OwnerId == _ownerId
+            _db.Verify(db => db.ExecuteAsync(It.Is<GetAlbumByIdQuery>(q =>
+                q.AlbumId.Name == albumId.Name && 
+                q.AlbumId.AlbumArtist == albumId.AlbumArtist &&
+                q.OwnerId == _ownerId
             )), Times.Once());
         }
 
@@ -39,7 +41,7 @@ namespace Rhyze.Tests.API.Queries
         {
             var request = new GetAlbumQuery { };
             var track = Fixture;
-            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByNameQuery>()))
+            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByIdQuery>()))
                .ReturnsAsync(new[] { track });
 
             var result = await _handler.Handle(request, default);

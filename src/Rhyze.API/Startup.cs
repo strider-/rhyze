@@ -7,8 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rhyze.API.Extensions;
 using Rhyze.API.Filters;
+using Rhyze.API.Framework;
 using Rhyze.Core.Interfaces;
+using Rhyze.Core.Models;
 using Rhyze.Services;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace Rhyze.API
@@ -24,6 +27,8 @@ namespace Rhyze.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            TypeDescriptor.AddAttributes(typeof(AlbumId), new TypeConverterAttribute(typeof(AlbumIdTypeConverter)));
+            
             services.AddDataAccessLayer(Configuration.GetSection("Database"));
 
             services.AddControllers(options =>
@@ -33,7 +38,8 @@ namespace Rhyze.API
                 // when implmenting the IRequireAnOwner interface on request models,
                 // this attribute sets the OwnerId property to the authenticated user id.
                 options.Filters.Add(new BindRequestModelsToUserAttribute());
-            });
+            })
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new AlbumIdJsonConverter()));
 
             services.AddJwtAuthentication(Configuration.GetSection("Authentication:Jwt"));
 

@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Rhyze.Data.Queries
 {
-    public class GetAlbumByNameQuery : IQueryAsync<IEnumerable<Track>>
+    public class GetAlbumByIdQuery : IQueryAsync<IEnumerable<Track>>
     {
-        public string AlbumName { get; }
+        public AlbumId AlbumId { get; }
 
         public Guid OwnerId { get; }
 
-        public GetAlbumByNameQuery(Guid ownerId, string name)
+        public GetAlbumByIdQuery(Guid ownerId, AlbumId albumId)
         {
             OwnerId = ownerId;
-            AlbumName = name;
+            AlbumId = albumId;
         }
 
         public async Task<IEnumerable<Track>> ExecuteAsync(IDbConnection conn)
@@ -28,7 +28,11 @@ namespace Rhyze.Data.Queries
                 TrackNo = Order.Ascending
             });
 
-            return await conn.QueryAsync<Track>(t => t.OwnerId == OwnerId && t.Album == AlbumName, orderBy: order);
+            return await conn.QueryAsync<Track>(
+                t => t.OwnerId == OwnerId &&
+                t.Album == AlbumId.Name &&
+                t.AlbumArtist == AlbumId.AlbumArtist,
+            orderBy: order);
         }
     }
 }

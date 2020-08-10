@@ -1,4 +1,5 @@
 ﻿using RepoDb;
+using RepoDb.Interfaces;
 using Rhyze.Core.Models;
 
 namespace Rhyze.Data

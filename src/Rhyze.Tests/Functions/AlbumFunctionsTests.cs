@@ -40,25 +40,27 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Fetches_Album_Tracks()
         {
+            var albumId = new AlbumId("QUxpQ0UnUyBFTU9UaU9OCUJsb3Nzb20gQ0VOU09SRUQhISBFLlAu");
             var msg = new DeleteAlbumMessage
             {
-                AlbumName = "ARCHVS",
+                AlbumIdValue = albumId.Value,
                 OwnerId = _ownerId
             };
 
             await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
 
-            _db.Verify(db => db.ExecuteAsync(It.Is<GetAlbumByNameQuery>(
-                q => q.AlbumName == msg.AlbumName && q.OwnerId == _ownerId)
+            _db.Verify(db => db.ExecuteAsync(It.Is<GetAlbumByIdQuery>(q => 
+                q.AlbumId.Value == msg.AlbumIdValue && 
+                q.OwnerId == _ownerId)
             ), Times.Once());
         }
 
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Deletes_Existing_Blobs()
         {
-            var msg = new DeleteAlbumMessage { };
+            var msg = new DeleteAlbumMessage { AlbumIdValue = "QUxpQ0UnUyBFTU9UaU9OCUJsb3Nzb20gQ0VOU09SRUQhISBFLlAu" };
             var tracks = MultipleTracks();
-            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByNameQuery>()))
+            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByIdQuery>()))
                .ReturnsAsync(tracks);
 
             await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
@@ -70,9 +72,9 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Hard_Deletes_The_Album()
         {
-            var msg = new DeleteAlbumMessage { };
+            var msg = new DeleteAlbumMessage { AlbumIdValue = "QUxpQ0UnUyBFTU9UaU9OCUJsb3Nzb20gQ0VOU09SRUQhISBFLlAu" };
             var tracks = SingleTrack();
-            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByNameQuery>()))
+            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByIdQuery>()))
                .ReturnsAsync(tracks);
 
             await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, Mock.Of<ILogger>());
@@ -83,22 +85,23 @@ namespace Rhyze.Tests.Functions
         [Fact]
         public async Task DequeueAlbumDeletionAsync_Writes_To_The_Log()
         {
+            var albumId = new AlbumId("D.watt", "Opium and Purple Haze EP");
             var msg = new DeleteAlbumMessage
             {
-                AlbumName = "Opium and Purple Haze EP",
+                AlbumIdValue = albumId.Value,
                 OwnerId = _ownerId
             };
             var log = new MockLogger();
-            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByNameQuery>()))
+            _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByIdQuery>()))
                .ReturnsAsync(SingleTrack());
 
             await _func.DequeueAlbumDeletionAsync(msg, _audioContainer.Object, _imageContainer.Object, log.Object);
 
-            log.Verify(LogLevel.Information, $"Recieved album to delete: {msg.AlbumName}");
+            log.Verify(LogLevel.Information, $"Recieved album to delete: {albumId.Name}");
             log.Verify(LogLevel.Trace, $"Deleting Track '01' (name: file)");
             log.Verify(LogLevel.Trace, "\tAudio blob deleted.");
             log.Verify(LogLevel.Trace, "\tImage blob deleted.");
-            log.Verify(LogLevel.Information, $"{msg.AlbumName} has been deleted.");
+            log.Verify(LogLevel.Information, $"{albumId.Name} has been deleted.");
         }
 
         private Track[] SingleTrack()

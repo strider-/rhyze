@@ -23,7 +23,7 @@ namespace Rhyze.API.Controllers
             return await _mediator.Send(query);
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("{albumId}")]
         public async Task<IEnumerable<TrackVM>> TracksAsync([FromRoute] GetAlbumQuery query)
         {
             return await _mediator.Send(query);

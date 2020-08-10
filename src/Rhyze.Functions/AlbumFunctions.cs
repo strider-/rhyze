@@ -2,6 +2,7 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Rhyze.Core.Messages;
+using Rhyze.Core.Models;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
 using Rhyze.Data.Queries;
@@ -25,9 +26,11 @@ namespace Rhyze.Functions
             ILogger log
         )
         {
-            log.LogInformation($"Recieved album to delete: {msg.AlbumName}");
+            var albumId = new AlbumId(msg.AlbumIdValue);
 
-            var tracks = await _db.ExecuteAsync(new GetAlbumByNameQuery(msg.OwnerId, msg.AlbumName));
+            log.LogInformation($"Recieved album to delete: {albumId.Name}");
+
+            var tracks = await _db.ExecuteAsync(new GetAlbumByIdQuery(msg.OwnerId, albumId));
 
             foreach (var track in tracks)
             {
@@ -50,7 +53,7 @@ namespace Rhyze.Functions
 
             await _db.ExecuteAsync(new HardDeleteAlbumCommand(tracks));
 
-            log.LogInformation($"{msg.AlbumName} has been deleted.");
+            log.LogInformation($"{albumId.Name} has been deleted.");
         }
     }
 }

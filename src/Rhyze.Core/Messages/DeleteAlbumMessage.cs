@@ -8,9 +8,9 @@ namespace Rhyze.Core.Messages
     public class DeleteAlbumMessage
     {
         /// <summary>
-        /// The name of the album to delete
+        /// The id of the album to delete
         /// </summary>
-        public string AlbumName { get; set; }
+        public string AlbumIdValue { get; set; }
 
         /// <summary>
         /// The unique id of the owner of the album

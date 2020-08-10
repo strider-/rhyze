@@ -2,6 +2,7 @@
 using Rhyze.API.Models;
 using Rhyze.Core.Interfaces;
 using Rhyze.Core.Messages;
+using Rhyze.Core.Models;
 using Rhyze.Data;
 using Rhyze.Data.Commands;
 using System.ComponentModel.DataAnnotations;
@@ -12,8 +13,8 @@ namespace Rhyze.API.Commands
 {
     public class DeleteAlbumCommand : RequireAnOwner, IRequest
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify the album name to delete.")]
-        public string Name { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify the id of the album to delete.")]
+        public AlbumId Id { get; set; }
     }
 
     public class DeleteAlbumCommandHandler : IRequestHandler<DeleteAlbumCommand, Unit>
@@ -29,12 +30,12 @@ namespace Rhyze.API.Commands
 
         public async Task<Unit> Handle(DeleteAlbumCommand request, CancellationToken cancellationToken)
         {
-            await _db.ExecuteAsync(new SoftDeleteAlbumCommand(request.OwnerId, request.Name));
+            await _db.ExecuteAsync(new SoftDeleteAlbumCommand(request.OwnerId, request.Id));
 
             await _service.EnqueueAlbumDeletionAsync(new DeleteAlbumMessage
             {
                 OwnerId = request.OwnerId,
-                AlbumName = request.Name
+                AlbumIdValue = request.Id.Value
             });
 
             return Unit.Value;

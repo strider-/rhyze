@@ -13,8 +13,8 @@ namespace Rhyze.API.Commands
 {
     public class GetAlbumQuery : RequireAnOwner, IRequest<IEnumerable<TrackVM>>
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You need to provide an album name!")]
-        public string Name { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "You need to provide an album id!")]
+        public AlbumId AlbumId { get; set; }
     }
 
     public class GetAlbumQueryHandler : IRequestHandler<GetAlbumQuery, IEnumerable<TrackVM>>
@@ -25,7 +25,7 @@ namespace Rhyze.API.Commands
 
         public async Task<IEnumerable<TrackVM>> Handle(GetAlbumQuery request, CancellationToken cancellationToken)
         {
-            var tracks = await _db.ExecuteAsync(new GetAlbumByNameQuery(request.OwnerId, request.Name));
+            var tracks = await _db.ExecuteAsync(new GetAlbumByIdQuery(request.OwnerId, request.AlbumId));
 
             return ToViewModel(tracks);
         }

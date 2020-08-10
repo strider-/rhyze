@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Queues;
 using Moq;
 using Rhyze.Core.Messages;
+using Rhyze.Core.Models;
 using Rhyze.Services;
 using System;
 using System.Text;
@@ -40,10 +41,10 @@ namespace Rhyze.Tests.Services
         [Fact]
         public async Task EnqueueAlbumDeletionAsync_Enqueues_A_Base_64_Json_Message()
         {
-            var albumName = "Cafe de Touhou 8";
+            var albumid = new AlbumId("DDBY", "Cafe de Touhou 8");
             var ownerId = Guid.Empty;
-            var msg = new DeleteAlbumMessage { AlbumName = albumName, OwnerId = ownerId };
-            var json = $"{{\"AlbumName\":\"{albumName}\",\"OwnerId\":\"{ownerId}\"}}";
+            var msg = new DeleteAlbumMessage { AlbumIdValue = albumid.Value, OwnerId = ownerId };
+            var json = $"{{\"AlbumIdValue\":\"{albumid.Value}\",\"OwnerId\":\"{ownerId}\"}}";
 
             var expectedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
 
