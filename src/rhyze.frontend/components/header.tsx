@@ -1,6 +1,12 @@
 import Head from 'next/head'
 import { Navbar, Nav } from 'react-bootstrap'
 import { logout } from '../services/auth_service';
+import Router from "next/router";
+
+const logOutAndRedirect = async () =>{
+    logout();
+    await Router.push("/login?loggedOut=true");
+}
 
 const Header = () => (
     <>
@@ -12,7 +18,7 @@ const Header = () => (
             <Navbar.Brand href="/">Rhyze</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Nav className="ml-auto">
-                <Nav.Link href="#" onClick={() => logout()}>Logout</Nav.Link>
+                <Nav.Link href="#" onClick={async () => await logOutAndRedirect()}>Logout</Nav.Link>
             </Nav>
         </Navbar>
     </>

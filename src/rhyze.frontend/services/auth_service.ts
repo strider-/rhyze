@@ -19,7 +19,9 @@ export const login = async (inputs: LoginInputs): Promise<ErrorMessage | void> =
 
     const res: any = await post(config, "/identitytoolkit/v3/relyingparty/verifyPassword", data).catch(catchAxiosError);
 
-    if (res.error) {
+    if (res.code === 400) {
+      return "Invalid username and/or password.";
+    } else if (res.error) {
       return res.error;
     }
     if (res.data && res.data.idToken && res.data.refreshToken) {
@@ -37,10 +39,11 @@ export const refreshToken = async(ctx: NextPageContext) : Promise<ErrorMessage |
     );
 
     const res: any = await post(config, "/v1/token", data).catch(catchAxiosError);
-
+    
     if (res.error) {
       return res.error;
     }
+
     if (res.data && res.data.id_token && res.data.refresh_token) {
       await AuthToken.storeTokens(res.data.id_token, res.data.refresh_token);
       return;

@@ -1,6 +1,5 @@
 import jwtDecode from "jwt-decode";
 import Cookie from "js-cookie";
-import Router from "next/router";
 import { AppCookies } from "./auth_service";
 
 export type DecodedToken = {
@@ -41,12 +40,9 @@ export class AuthToken {
   static async storeTokens(idToken: string, refreshToken: string) {
     Cookie.set(AppCookies.authToken, idToken);
     Cookie.set(AppCookies.refreshToken, refreshToken);
-    await Router.push("/");
   }
 
   static async clearTokens(){
-    Cookie.set(AppCookies.authToken, '');
-    Cookie.set(AppCookies.refreshToken, '');
-    await Router.push("/login?loggedOut=true");
+    this.storeTokens('', '');
   }
 }

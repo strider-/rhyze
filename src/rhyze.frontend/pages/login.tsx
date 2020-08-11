@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import { login } from '../services/auth_service';
+import Router from "next/router";
 
 export type LoginInputs = {
   email: string
   password: string
 }
+
+const LoginError = ({error}) => 
+  error 
+    ? <div className="text-danger"><p className="text-center">{error}</p></div>
+    : null;
 
 export default function Login() {
   const [inputs, setInputs] = useState({ email: "", password: "" });
@@ -17,6 +23,8 @@ export default function Login() {
     const res = await login(inputs);
     if (res) {
       setError(res);
+    } else {
+      await Router.push('/');
     }
   };
 
@@ -54,9 +62,11 @@ export default function Login() {
                               onChange={handleInputChange}
                 />
               </Form.Group>
-              <Button block type="submit">Login</Button>
+              <Form.Group>
+                <Button block type="submit" size="lg">Login</Button>
+              </Form.Group>
+              <LoginError error={error} />
           </Form>
-          {error ? <h5>Error: {error}</h5> : null}
         </Col>
       </Row>
     </Container>
