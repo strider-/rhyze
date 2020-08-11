@@ -11,5 +11,6 @@ The projects that compose the entirety of the backend structure of the applicati
 ### [Rhyze.Tests](.\Rhyze.Tests\README.md)
 
 ## Frontend
+The web UI project.
 
-TBD
+### [rhyze.frontend](.\rhyze.frontend\README.md)
