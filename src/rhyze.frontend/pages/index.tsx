@@ -2,9 +2,7 @@ import Header from '../components/header'
 import { AuthProps, privateRoute } from "../components/private_route";
 import { Container, Col, Row } from 'react-bootstrap';
 
-type Props = AuthProps;
-
-function Home({auth}:Props) {
+function Home({auth}:AuthProps) {
   return <>
     <Header />
     <main className='main'>

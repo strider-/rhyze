@@ -26,3 +26,16 @@ export function catchAxiosError(err: AxiosError): ErrorResponse {
   }
   return { error: message, code: err.response.status };
 }
+
+export function catchApiError(err: AxiosError): ErrorResponse {
+  console.log("Error", err.message);
+  let message = "An error occurred communicating with the server.";
+
+  if(err.response){
+    message = err.response.data.title;
+  } else {
+    message = "No error detail was returned.";
+  }
+
+  return {error: message, code: err.response.status};
+}

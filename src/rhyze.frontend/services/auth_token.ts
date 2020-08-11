@@ -20,11 +20,7 @@ export class AuthToken {
     } catch (e) {
     }
   }
-
-  get authorizationString() {
-    return `Bearer ${this.token}`;
-  }
-
+  
   get expiresAt(): Date {
     return new Date(this.decodedToken.exp * 1000);
   }
@@ -37,12 +33,12 @@ export class AuthToken {
     return !this.isExpired;
   }
 
-  static async storeTokens(idToken: string, refreshToken: string) {
+  static storeTokens(idToken: string, refreshToken: string) {
     Cookie.set(AppCookies.authToken, idToken);
     Cookie.set(AppCookies.refreshToken, refreshToken);
   }
 
-  static async clearTokens(){
+  static clearTokens(){
     this.storeTokens('', '');
   }
 }
