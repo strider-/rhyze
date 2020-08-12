@@ -17,12 +17,19 @@ namespace Rhyze.Data.Queries
 
         public async Task<AlbumMetadata> ExecuteAsync(IDbConnection conn)
         {
-            return (await conn.ExecuteQueryAsync<AlbumMetadata>("spGetAlbumMetadata", new
+            var data = (await conn.ExecuteQueryAsync<AlbumMetadata>("spGetAlbumMetadata", new
             {
                 OwnerId,
                 Album = AlbumId.Name,
                 AlbumId.AlbumArtist
             }, CommandType.StoredProcedure)).SingleOrDefault();
+
+            if (data != null)
+            {
+                data.Id = AlbumId;
+            }
+
+            return data;
         }
 
         public Guid OwnerId { get; }

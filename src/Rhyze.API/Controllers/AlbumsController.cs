@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Rhyze.API.Commands;
-using Rhyze.API.Models;
 using Rhyze.API.Queries;
 using Rhyze.Core.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Rhyze.API.Controllers
@@ -24,15 +24,32 @@ namespace Rhyze.API.Controllers
         }
 
         [HttpGet("{albumId}")]
-        public async Task<IEnumerable<TrackVM>> TracksAsync([FromRoute] GetAlbumQuery query)
+        public async Task<IActionResult> TracksAsync([FromRoute] GetAlbumQuery query)
         {
-            return await _mediator.Send(query);
+            var result = await _mediator.Send(query);
+            if (result == null || !result.Any())
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         [HttpGet("{albumId}/metadata")]
-        public async Task<AlbumMetadata> AlbumMetadataAsync([FromRoute] GetAlbumMetadataQuery query)
+
+        public async Task<IActionResult> AlbumMetadataAsync([FromRoute] GetAlbumMetadataQuery query)
         {
-            return await _mediator.Send(query);
+            var result = await _mediator.Send(query);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("metadata")]
+        public async Task<AlbumMetadata> UpdateAlbumMetadataAsync([FromBody] UpdateAlbumMetadataCommand cmd)
+        {
+            return await _mediator.Send(cmd);
         }
 
         [HttpDelete("delete")]
