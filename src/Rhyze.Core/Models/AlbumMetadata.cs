@@ -2,6 +2,8 @@
 {
     public class AlbumMetadata
     {
+        public AlbumId Id { get; set; }
+
         public string Album { get; set; }
 
         public string AlbumArtist { get; set; }
