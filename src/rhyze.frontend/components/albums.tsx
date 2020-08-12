@@ -16,7 +16,7 @@ const Albums = ({auth}: AuthProps) => {
     }, []);
 
     if(state == null) {
-        return false;
+        return null;
     } else if(Array.isArray(state)){
         const albums = state as Album[];
         return <div className="d-flex flex-row card-columns">

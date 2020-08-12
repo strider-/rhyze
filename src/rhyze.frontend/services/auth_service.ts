@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { LoginInputs } from '../pages/login';
-import { catchAxiosError } from "./error";
+import { catchAuthError } from "./error";
 import { AuthToken } from './auth_token';
 import { NextPageContext } from 'next';
 import ServerCookie from "next-cookies";
@@ -17,7 +17,7 @@ export const login = async (inputs: LoginInputs): Promise<ErrorMessage | void> =
     data.append("returnSecureToken", "true");
     const config = authConfig("https://www.googleapis.com");
 
-    const res: any = await post(config, "/identitytoolkit/v3/relyingparty/verifyPassword", data).catch(catchAxiosError);
+    const res: any = await post(config, "/identitytoolkit/v3/relyingparty/verifyPassword", data).catch(catchAuthError);
 
     if (res.code === 400) {
       return "Invalid username and/or password.";
@@ -38,7 +38,7 @@ export const refreshToken = async(ctx: NextPageContext) : Promise<ErrorMessage |
       { grant_type: "refresh_token", refresh_token: token }
     );
 
-    const res: any = await post(config, "/v1/token", data).catch(catchAxiosError);
+    const res: any = await post(config, "/v1/token", data).catch(catchAuthError);
     
     if (res.error) {
       return res.error;
@@ -54,7 +54,7 @@ export const refreshToken = async(ctx: NextPageContext) : Promise<ErrorMessage |
 export const logout = () => AuthToken.clearTokens();
 
 const post = (config: AxiosRequestConfig, url: string, data: URLSearchParams) => {
-  return axios.post(url, data, config).catch(catchAxiosError);
+  return axios.post(url, data, config).catch(catchAuthError);
 };
 
 const authConfig = (baseURL: string) : AxiosRequestConfig => {

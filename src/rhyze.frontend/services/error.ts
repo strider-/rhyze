@@ -5,7 +5,7 @@ export type ErrorResponse = {
   code: number
 }
 
-export function catchAxiosError(err: AxiosError): ErrorResponse {
+export function catchAuthError(err: AxiosError): ErrorResponse {
   // Something happened in setting up the request that triggered an Error
   console.log("Error", err.message);
   let message = "Something happened in setting up the request that triggered an Error";
