@@ -5,18 +5,18 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rhyze.API.Queries
+namespace Rhyze.API.Requests
 {
-    public class GetMyselfQuery : IRequest<Me>
+    public class GetMyselfRequest : IRequest<Me>
     {
-        public GetMyselfQuery(ClaimsPrincipal user) => User = user;
+        public GetMyselfRequest(ClaimsPrincipal user) => User = user;
 
         public ClaimsPrincipal User { get; }
     }
 
-    public class GetMyselfHandler : IRequestHandler<GetMyselfQuery, Me>
+    public class GetMyselfRequestHandler : IRequestHandler<GetMyselfRequest, Me>
     {
-        public Task<Me> Handle(GetMyselfQuery request, CancellationToken cancellationToken)
+        public Task<Me> Handle(GetMyselfRequest request, CancellationToken cancellationToken)
         {
             return Task.FromResult(new Me
             {

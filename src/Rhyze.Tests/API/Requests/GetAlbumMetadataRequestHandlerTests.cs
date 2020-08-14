@@ -1,30 +1,30 @@
 ﻿using Moq;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using Rhyze.Core.Models;
 using Rhyze.Data;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Rhyze.Tests.API.Queries
+namespace Rhyze.Tests.API.Requests
 {
-    [Trait("API.Queries", nameof(GetAlbumMetadataQueryHandler))]
-    public class GetAlbumMetadataQueryHandlerTests
+    [Trait("API.Queries", nameof(GetAlbumMetadataRequestHandler))]
+    public class GetAlbumMetadataRequestHandlerTests
     {
         private readonly Guid _ownerId = Guid.NewGuid();
-        private readonly GetAlbumMetadataQueryHandler _handler;
+        private readonly GetAlbumMetadataRequestHandler _handler;
         private readonly Mock<IDatabase> _db = new Mock<IDatabase>();
 
-        public GetAlbumMetadataQueryHandlerTests()
+        public GetAlbumMetadataRequestHandlerTests()
         {
-            _handler = new GetAlbumMetadataQueryHandler(_db.Object);
+            _handler = new GetAlbumMetadataRequestHandler(_db.Object);
         }
 
         [Fact]
         public async Task Handle_Executes_The_Expected_Database_Query()
         {
             var albumId = new AlbumId("コトノハルカナ", "BlackBlackCandy");
-            var request = new GetAlbumMetadataQuery { AlbumId = albumId, OwnerId = _ownerId };
+            var request = new GetAlbumMetadataRequest { AlbumId = albumId, OwnerId = _ownerId };
 
             await _handler.Handle(request, default);
 

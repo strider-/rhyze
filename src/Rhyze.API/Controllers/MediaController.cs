@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Rhyze.API.Commands;
 using Rhyze.API.Models;
+using Rhyze.API.Requests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,7 +20,7 @@ namespace Rhyze.API.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue,
                            MemoryBufferThreshold = int.MaxValue,
                            ValueLengthLimit = int.MaxValue)]
-        public async Task<IEnumerable<UploadResult>> UploadTracksAsync([FromForm] UploadTracksCommand cmd)
+        public async Task<IEnumerable<UploadResult>> UploadTracksAsync([FromForm] UploadTracksRequest cmd)
         {
             return await _mediator.Send(cmd);
         }

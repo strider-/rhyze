@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Rhyze.API.Models;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using System.Threading.Tasks;
 
 namespace Rhyze.API.Controllers
@@ -16,7 +16,7 @@ namespace Rhyze.API.Controllers
         [Route("/me")]
         public async Task<Me> MeAsync()
         {
-            return await _mediator.Send(new GetMyselfQuery(User));
+            return await _mediator.Send(new GetMyselfRequest(User));
         }
     }
 }

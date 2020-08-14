@@ -1,5 +1,5 @@
 ﻿using Moq;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using Rhyze.Data;
 using Rhyze.Data.Queries;
 using Rhyze.Tests.Fixtures;
@@ -7,27 +7,27 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Rhyze.Tests.API.Queries
+namespace Rhyze.Tests.API.Requests
 {
-    [Trait("API.Queries", nameof(GetUserIdQueryHandler))]
-    public class GetUserIdQueryHandlerTests
+    [Trait("API.Queries", nameof(GetUserIdRequestHandler))]
+    public class GetUserIdRequestHandlerTests
     {
-        private readonly GetUserIdQueryHandler _handler;
+        private readonly GetUserIdRequestHandler _handler;
         private readonly Mock<IDatabase> _db = new Mock<IDatabase>();
         private readonly ClaimsPrincipalFixture _fixture;
 
-        public GetUserIdQueryHandlerTests()
+        public GetUserIdRequestHandlerTests()
         {
             _fixture = new ClaimsPrincipalFixture();
 
-            _handler = new GetUserIdQueryHandler(_db.Object);
+            _handler = new GetUserIdRequestHandler(_db.Object);
         }
 
         [Fact]
         public async Task Handle_Executes_The_Expected_Database_Query()
         {
             var expectedId = Guid.NewGuid();
-            var request = new GetUserIdQuery(_fixture.User);
+            var request = new GetUserIdRequest(_fixture.User);
             _db.Setup(db => db.ExecuteAsync(It.IsAny<GetUserIdFromIdentityQuery>())).ReturnsAsync(expectedId);
 
             var id = await _handler.Handle(request, default);

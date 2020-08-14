@@ -1,7 +1,7 @@
 ﻿using Moq;
 using Rhyze.API.Controllers;
 using Rhyze.API.Models;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,7 +13,7 @@ namespace Rhyze.Tests.API.Controllers
         [Fact]
         public async Task MeAsync_Returns_An_Authenticated_User_From_The_Current_Context()
         {
-            Mediator.Setup(m => m.Send(It.IsAny<GetMyselfQuery>(), default))
+            Mediator.Setup(m => m.Send(It.IsAny<GetMyselfRequest>(), default))
                      .ReturnsAsync(new Me
                      {
                          UserId = PrincipalFixture.ExpectedRhyzeId,
@@ -22,7 +22,7 @@ namespace Rhyze.Tests.API.Controllers
 
             var result = await Controller.MeAsync();
 
-            Mediator.Verify(m => m.Send(It.Is<GetMyselfQuery>(
+            Mediator.Verify(m => m.Send(It.Is<GetMyselfRequest>(
                 q => q.User == PrincipalFixture.User), default)
             );
             Assert.NotNull(result);

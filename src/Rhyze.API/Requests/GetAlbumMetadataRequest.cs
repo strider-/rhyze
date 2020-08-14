@@ -6,21 +6,21 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rhyze.API.Queries
+namespace Rhyze.API.Requests
 {
-    public class GetAlbumMetadataQuery : RequireAnOwner, IRequest<AlbumMetadata>
+    public class GetAlbumMetadataRequest : RequireAnOwner, IRequest<AlbumMetadata>
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "You need to provide an album id!")]
         public AlbumId AlbumId { get; set; }
     }
 
-    public class GetAlbumMetadataQueryHandler : IRequestHandler<GetAlbumMetadataQuery, AlbumMetadata>
+    public class GetAlbumMetadataRequestHandler : IRequestHandler<GetAlbumMetadataRequest, AlbumMetadata>
     {
         private readonly IDatabase _db;
 
-        public GetAlbumMetadataQueryHandler(IDatabase db) => _db = db;
+        public GetAlbumMetadataRequestHandler(IDatabase db) => _db = db;
 
-        public async Task<AlbumMetadata> Handle(GetAlbumMetadataQuery request, CancellationToken cancellationToken)
+        public async Task<AlbumMetadata> Handle(GetAlbumMetadataRequest request, CancellationToken cancellationToken)
         {
             return await _db.ExecuteAsync(new Data.Queries.GetAlbumMetadataQuery(request.OwnerId, request.AlbumId));
         }
