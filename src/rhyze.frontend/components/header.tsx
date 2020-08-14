@@ -3,7 +3,7 @@ import { Navbar, Nav } from 'react-bootstrap'
 import { logout } from '../services/auth_service';
 import Router from "next/router";
 
-const logOutAndRedirect = async () =>{
+const logOutAndRedirect = async () => {
     logout();
     await Router.push("/login?loggedOut=true");
 }
