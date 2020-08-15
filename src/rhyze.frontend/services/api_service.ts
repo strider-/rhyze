@@ -10,14 +10,30 @@ export type Album = {
     touchedUtc: Date
 };
 
+export type Track = {
+    id: string,
+    title: string,
+    album: string,
+    artist: string,
+    albumArtist: string,
+    trackNo: number,
+    trackCount: number,
+    discNo: number,
+    discCount: number,
+    year: number,
+    duration: number,
+    imageUrl: string,
+    playCount: number
+}
+
 export const getAlbums = async (token: AuthToken, skip: number = 0, take: number = 50): Promise<ErrorResponse | Album[]> => {
     const config = getConfig(token);
     config.params = { skip, take };
     return await get<Album[]>('/albums', config);
 }
 
-export const getAlbum = async (token: AuthToken, id: string): Promise<ErrorResponse | Album> => {
-    return await get<Album>(`/albums/${id}`, getConfig(token));
+export const getAlbum = async (token: AuthToken, id: string): Promise<ErrorResponse | Track[]> => {
+    return await get<Track[]>(`/albums/${id}`, getConfig(token));
 }
 
 const get = <T>(path: string, config?: AxiosRequestConfig) => {

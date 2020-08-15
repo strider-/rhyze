@@ -24,6 +24,7 @@ export const login = async (inputs: LoginInputs): Promise<ErrorMessage | void> =
     }
     if (res.data && res.data.idToken && res.data.refreshToken) {
         AuthToken.storeTokens(res.data.idToken, res.data.refreshToken);
+        return
     }
     return "Something unexpected happened!";
 }
