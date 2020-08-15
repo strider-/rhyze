@@ -9,9 +9,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rhyze.API.Queries
+namespace Rhyze.API.Requests
 {
-    public class GetAlbumsQuery : RequireAnOwner, IRequest<IEnumerable<Album>>
+    public class GetAlbumsRequest : RequireAnOwner, IRequest<IEnumerable<Album>>
     {
         [Range(0, int.MaxValue)]
         public int Skip { get; set; } = 0;
@@ -20,13 +20,13 @@ namespace Rhyze.API.Queries
         public int Take { get; set; } = 50;
     }
 
-    public class GetAlbumsQueryHandler : IRequestHandler<GetAlbumsQuery, IEnumerable<Album>>
+    public class GetAlbumsRequestHandler : IRequestHandler<GetAlbumsRequest, IEnumerable<Album>>
     {
         private readonly IDatabase _db;
 
-        public GetAlbumsQueryHandler(IDatabase db) => _db = db;
+        public GetAlbumsRequestHandler(IDatabase db) => _db = db;
 
-        public async Task<IEnumerable<Album>> Handle(GetAlbumsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Album>> Handle(GetAlbumsRequest request, CancellationToken cancellationToken)
         {
             var query = new GetAlbumListingQuery(
                 request.OwnerId,

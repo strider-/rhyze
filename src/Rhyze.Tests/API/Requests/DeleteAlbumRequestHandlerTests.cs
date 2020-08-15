@@ -1,5 +1,5 @@
 ﻿using Moq;
-using Rhyze.API.Commands;
+using Rhyze.API.Requests;
 using Rhyze.Core.Interfaces;
 using Rhyze.Core.Messages;
 using Rhyze.Core.Models;
@@ -9,25 +9,25 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Rhyze.Tests.API.Commands
+namespace Rhyze.Tests.API.Requests
 {
-    [Trait("API.Commands", nameof(DeleteAlbumCommandHandler))]
-    public class DeleteAlbumCommandHandlerTests
+    [Trait("API.Requests", nameof(DeleteAlbumRequestHandler))]
+    public class DeleteAlbumRequestHandlerTests
     {
-        private readonly DeleteAlbumCommandHandler _hander;
+        private readonly DeleteAlbumRequestHandler _hander;
         private readonly Mock<IQueueService> _service = new Mock<IQueueService>();
         private readonly Mock<IDatabase> _db = new Mock<IDatabase>();
 
-        public DeleteAlbumCommandHandlerTests()
+        public DeleteAlbumRequestHandlerTests()
         {
-            _hander = new DeleteAlbumCommandHandler(_service.Object, _db.Object);
+            _hander = new DeleteAlbumRequestHandler(_service.Object, _db.Object);
         }
 
         [Fact]
         public async Task Handle_Soft_Deletes_The_Album()
         {
             var albumId = new AlbumId("かめりあ", "かめりあ - Xroniàl Xéro");
-            var request = new DeleteAlbumCommand { Id = albumId };
+            var request = new DeleteAlbumRequest { Id = albumId };
 
             await _hander.Handle(request, default);
 
@@ -41,7 +41,7 @@ namespace Rhyze.Tests.API.Commands
         {
             var albumId = new AlbumId("EXIT TUNES", "EXIT TUNES PRESENTS Vocaloconnection feat. 初音ミク");
             var id = Guid.NewGuid();
-            var request = new DeleteAlbumCommand { Id = albumId, OwnerId = id };
+            var request = new DeleteAlbumRequest { Id = albumId, OwnerId = id };
 
             await _hander.Handle(request, default);
 

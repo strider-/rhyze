@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rhyze.API.Commands
+namespace Rhyze.API.Requests
 {
-    public class UpdateAlbumMetadataCommand : RequireAnOwner, IRequest<AlbumMetadata>
+    public class UpdateAlbumMetadataRequest : RequireAnOwner, IRequest<AlbumMetadata>
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "You need to provide an album id!")]
         public AlbumId Id { get; set; }
@@ -26,13 +26,13 @@ namespace Rhyze.API.Commands
         public int? DiscCount { get; set; }
     }
 
-    public class UpdateAlbumMetadataCommandHandler : IRequestHandler<UpdateAlbumMetadataCommand, AlbumMetadata>
+    public class UpdateAlbumMetadataRequestHandler : IRequestHandler<UpdateAlbumMetadataRequest, AlbumMetadata>
     {
         private readonly IDatabase _db;
 
-        public UpdateAlbumMetadataCommandHandler(IDatabase db) => _db = db;
+        public UpdateAlbumMetadataRequestHandler(IDatabase db) => _db = db;
 
-        public async Task<AlbumMetadata> Handle(UpdateAlbumMetadataCommand request, CancellationToken cancellationToken)
+        public async Task<AlbumMetadata> Handle(UpdateAlbumMetadataRequest request, CancellationToken cancellationToken)
         {
             var metadata = new AlbumMetadata
             {

@@ -1,5 +1,5 @@
 ﻿using Moq;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using Rhyze.Core.Models;
 using Rhyze.Data;
 using Rhyze.Data.Queries;
@@ -7,25 +7,25 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Rhyze.Tests.API.Queries
+namespace Rhyze.Tests.API.Requests
 {
-    [Trait("API.Queries", nameof(GetAlbumQueryHandler))]
-    public class GetAlbumQueryHandlerTests
+    [Trait("API.Queries", nameof(GetAlbumRequestHandler))]
+    public class GetAlbumRequestHandlerTests
     {
         private readonly Mock<IDatabase> _db = new Mock<IDatabase>();
-        private readonly GetAlbumQueryHandler _handler;
+        private readonly GetAlbumRequestHandler _handler;
         private readonly Guid _ownerId = Guid.NewGuid();
 
-        public GetAlbumQueryHandlerTests()
+        public GetAlbumRequestHandlerTests()
         {
-            _handler = new GetAlbumQueryHandler(_db.Object);
+            _handler = new GetAlbumRequestHandler(_db.Object);
         }
 
         [Fact]
         public async Task Handle_Executes_The_Expected_Database_Query()
         {
             var albumId = new AlbumId("uma vs. モリモリあつし", "Re：End of a Dream");
-            var request = new GetAlbumQuery { AlbumId = albumId, OwnerId = _ownerId };
+            var request = new GetAlbumRequest { AlbumId = albumId, OwnerId = _ownerId };
 
             await _handler.Handle(request, default);
 
@@ -39,7 +39,7 @@ namespace Rhyze.Tests.API.Queries
         [Fact]
         public async Task Handle_Maps_Track_To_View_Model()
         {
-            var request = new GetAlbumQuery { };
+            var request = new GetAlbumRequest { };
             var track = Fixture;
             _db.Setup(db => db.ExecuteAsync(It.IsAny<GetAlbumByIdQuery>()))
                .ReturnsAsync(new[] { track });

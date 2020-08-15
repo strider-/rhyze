@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -14,7 +14,7 @@ namespace Rhyze.API.Security
 
         public override async Task TokenValidated(TokenValidatedContext context)
         {
-            var id = await _mediator.Send(new GetUserIdQuery(context.Principal));
+            var id = await _mediator.Send(new GetUserIdRequest(context.Principal));
 
             var ident = (ClaimsIdentity)context.Principal.Identity;
 

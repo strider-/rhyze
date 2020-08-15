@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using Rhyze.API.Security;
 using Rhyze.Tests.Fixtures;
 using System;
@@ -38,7 +38,7 @@ namespace Rhyze.Tests.API
                 Principal = _fixture.User
             };
             Predicate<Claim> predicate = c => c.Type == "rhyze_id" && c.Value == id.ToString();
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserIdQuery>(), default)).ReturnsAsync(id);
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserIdRequest>(), default)).ReturnsAsync(id);
 
             Assert.False(_fixture.User.HasClaim(predicate));
             await _events.TokenValidated(context);

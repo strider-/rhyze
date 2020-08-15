@@ -1,22 +1,22 @@
 ﻿using Moq;
-using Rhyze.API.Queries;
+using Rhyze.API.Requests;
 using Rhyze.Data;
 using Rhyze.Data.Queries;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Rhyze.Tests.API.Queries
+namespace Rhyze.Tests.API.Requests
 {
-    [Trait("API.Queries", nameof(GetAlbumsQuery))]
-    public class GetAlbumsQueryHanderTests
+    [Trait("API.Queries", nameof(GetAlbumsRequest))]
+    public class GetAlbumsRequestHanderTests
     {
         private readonly Mock<IDatabase> _db = new Mock<IDatabase>();
-        private readonly GetAlbumsQueryHandler _handler;
+        private readonly GetAlbumsRequestHandler _handler;
 
-        public GetAlbumsQueryHanderTests()
+        public GetAlbumsRequestHanderTests()
         {
-            _handler = new GetAlbumsQueryHandler(_db.Object);
+            _handler = new GetAlbumsRequestHandler(_db.Object);
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace Rhyze.Tests.API.Queries
             var ownerId = Guid.NewGuid();
             int skip = 5,
                 take = 23;
-            var request = new GetAlbumsQuery { OwnerId = ownerId, Skip = skip, Take = take };
+            var request = new GetAlbumsRequest { OwnerId = ownerId, Skip = skip, Take = take };
 
             await _handler.Handle(request, default);
 
